@@ -1,8 +1,37 @@
 ---
-title: "Final Project Prelimary EDA"
+title: "Final Project Preliminary EDA"
 name: "Sarah Petro"
 date: "November 15 2020"
 output: html_notebook
 
 ---
 
+##Research Question: 
+What video games were the most popular in 2019? This will be based on sale numbers and I also plan to break the popularity down by genre and sales in Europe and the US. Finally, I will use critic and user scores to see which popular games by sales were rated the highest and lowest.
+
+I found the data sets on Kaggle and downloaded the .csv files from the Kaggle website.
+
+
+##Video Game Sales 2019
+The first data set I used is Video Game Sales 2019 from Kaggle. It was gathered by Abdulshaheed Alqunber who is a student at Boston University and can be found at: https://www.kaggle.com/ashaheedq/video-games-sales-2019. He used this data set to continue the collection of data from the second dataset I used, Video Game Sales. Since the datasets are very similar, I plan to use the added benefit of looking specifically at 2019 data. However, this dataset also includes critic and user scores which I plan to use in my exploration.
+Below, you can see a snippet of the data along with some summary statistics. 
+```{r}
+head(vgsales.12.4.2019)
+```
+```{r}
+summary(vgsales.12.4.2019)
+```
+This dataset was originally collected as a continuation work of the second dataset I used, Video Game Sales. He explains that he scraped the data using a script and collected it into a .csv file.
+
+A case in this dataset describes a video game and its respective sales data that includes the year 2019, which the first dataset does not include. Each video game is its own separate case.
+
+I plan to use the Name, Genre, Critic_Score, and User_Score from this dataset to explore the most popular titles of 2019.
+
+```{r}
+nrow(vgsales.12.4.2019)
+```
+The dataset has a lot of rows for exploration at 55,792 rows in total.
+
+
+##Video Game Sales
+The second dataset I 
