@@ -2,36 +2,100 @@
 title: "Final Project Preliminary EDA"
 name: "Sarah Petro"
 date: "November 15 2020"
-output: html_notebook
-
+output: 
+  html_notebook: 
+    fig_width: 20
+    fig_height: 20
 ---
+```{r}
+##load packages
+library(mosaic)
+library(tidyverse)
+library(dplyr)
+library(ggplot2)
+```
+
 
 ##Research Question: 
-What video games were the most popular in 2019? This will be based on sale numbers and I also plan to break the popularity down by genre and sales in Europe and the US. Finally, I will use critic and user scores to see which popular games by sales were rated the highest and lowest.
+What video games are the most popular based on critic reviews? This will be based on sale numbers and I also plan to break the popularity down by figuring out which games have the most popular critic score and cross referencing that with sales data to see if high critic score correlates with better sales.
 
 I found the data sets on Kaggle and downloaded the .csv files from the Kaggle website.
 
 
-##Video Game Sales 2019
-The first data set I used is Video Game Sales 2019 from Kaggle. It was gathered by Abdulshaheed Alqunber who is a student at Boston University and can be found at: https://www.kaggle.com/ashaheedq/video-games-sales-2019. He used this data set to continue the collection of data from the second dataset I used, Video Game Sales. Since the datasets are very similar, I plan to use the added benefit of looking specifically at 2019 data. However, this dataset also includes critic and user scores which I plan to use in my exploration.
+##Meta Critic Games
+The first data set I used is Video Game Sales 2019 from Kaggle. It was gathered by Andrea Cadeddu who is a user at on Kaggle and can be found at: https://www.kaggle.com/skateddu/metacritic-games-stats-20112019. She gathered this data containing meta critic scores for video games. The data set was last updated in 2019, so it has current game data included to go along with the sales data in the Video Game Sales dataset.
 Below, you can see a snippet of the data along with some summary statistics. 
 ```{r}
-head(vgsales.12.4.2019)
+head(metacritic_games)
 ```
 ```{r}
-summary(vgsales.12.4.2019)
+summary(metacritic_games)
 ```
-This dataset was originally collected as a continuation work of the second dataset I used, Video Game Sales. He explains that he scraped the data using a script and collected it into a .csv file.
+This data set does not have much information on how it was collected and maintained, however it can be assumed she scraped the data from a meta critic score website.
 
-A case in this dataset describes a video game and its respective sales data that includes the year 2019, which the first dataset does not include. Each video game is its own separate case.
+A case in this dataset describes a video game and its respective critic and user score, whether positive, neutral, or negative. It also includes the platform, genre, and rating.
 
-I plan to use the Name, Genre, Critic_Score, and User_Score from this dataset to explore the most popular titles of 2019.
+I plan to use the game, platform, genre, positive_critics, and negative_critics in conjunction with the other dataset to conclude popular video games and their ratings.
 
 ```{r}
-nrow(vgsales.12.4.2019)
+nrow(metacritic_games)
 ```
-The dataset has a lot of rows for exploration at 55,792 rows in total.
+The dataset has a lot of rows for exploration at 5,699 rows in total.
 
 
 ##Video Game Sales
-The second dataset I 
+The second dataset I chose is the Video Game Sales data set. This dataset was collected by Gregory Smith who is a data engineer at Petzl America. This is the second version of the data and has not been updated for 4 years. It can be found at: https://www.kaggle.com/gregorut/videogamesales.
+I plan to use this dataset as a supplementary data source for the meta critic games dataset by using it to analyze how well rated games sold in both the North American and Global Markets.
+Below, you can see a snippet of the data and the columns included in the data set.
+```{r}
+head(vgsales)
+```
+```{r}
+summary(vgsales)
+```
+This dataset was also available in a .csv format from Kaggle which I was able to download and import into RStudio.
+
+A case in this dataset is the same as the last where one case represents video game sales for a particular video game in the year it was released.
+
+I plan to use the Name, Platform, Genre, Year, and NA_Sales columns in my data exploration. I plan to use these in conjunction with the Meta Critic Games data set columns.
+
+```{r}
+nrow(vgsales)
+```
+Again, there are plenty of columns for use in this dataset with 16,598.
+
+##Informative Plots
+With the summary statistics above, I am planning to gauge popularity for the most popular video games by using both critic score and sales.
+
+
+
+```{r}
+highest_rank <- which.max(metacritic_games$positive_critics)
+highest_rank
+```
+```{r}
+pos <- metacritic_games %>% filter(positive_critics > 100)
+pos
+```
+By filtering for games that were had more than 100 positiv critic scores, you are left with the 6 most popular games rated by critics.
+
+```{r}
+pos %>% ggplot(aes(x = game,y=positive_critics)) + geom_point(aes(color=game)) + theme(axis.text.x = element_text(angle = 60, vjust = 1, hjust=1))
+```
+Although this graph is a bit crowded in Rstudio, seeing it as a full graph you can see a visualization of the 6 most popular games according to critics, with God of War being the most popular.
+
+With this information, we can see how well God of War did in sales:
+```{r}
+vgsales.12.4.2019 %>% filter(Name == "God of War")
+```
+However, with some further analysis, the dataset I used does not contain 2019 video game sales data, which was when God of War was released, so let's see one of my favorite games:
+
+```{r}
+metacritic_games %>% filter(game == "The Elder Scrolls V: Skyrim")
+```
+```{r}
+vgsales %>% filter(Name == "The Elder Scrolls V: Skyrim")
+```
+
+As you can see, The Elder Scrolls V: Skyrim has been released 5 times (which is so annoying), and has lots of different sales data for different platforms. However, you can see it sells very well and has very good critic scores.
+

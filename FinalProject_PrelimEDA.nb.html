@@ -1759,128 +1759,272 @@ summary {
 
 
 <!-- rnb-text-begin -->
-<p>##Research Question: What video games were the most popular in 2019? This will be based on sale numbers and I also plan to break the popularity down by genre and sales in Europe and the US. Finally, I will use critic and user scores to see which popular games by sales were rated the highest and lowest.</p>
-<p>I found the data sets on Kaggle and downloaded the .csv files from the Kaggle website.</p>
-<p>##Video Game Sales 2019 The first data set I used is Video Game Sales 2019 from Kaggle. It was gathered by Abdulshaheed Alqunber who is a student at Boston University and can be found at: <a href="https://www.kaggle.com/ashaheedq/video-games-sales-2019" class="uri">https://www.kaggle.com/ashaheedq/video-games-sales-2019</a>. He used this data set to continue the collection of data from the second dataset I used, Video Game Sales. Since the datasets are very similar, I plan to use the added benefit of looking specifically at 2019 data. However, this dataset also includes critic and user scores which I plan to use in my exploration. Below, you can see a snippet of the data along with some summary statistics.</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuaGVhZCh2Z3NhbGVzLjEyLjQuMjAxOSlcbmBgYCJ9 -->
-<pre class="r"><code>head(vgsales.12.4.2019)</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyNsb2FkIHBhY2thZ2VzXG5saWJyYXJ5KG1vc2FpYylcbmxpYnJhcnkodGlkeXZlcnNlKVxubGlicmFyeShkcGx5cilcbmxpYnJhcnkoZ2dwbG90MilcbmBgYCJ9 -->
+<pre class="r"><code>##load packages
+library(mosaic)
+library(tidyverse)
+library(dplyr)
+library(ggplot2)</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbImRhdGEuZnJhbWUiXSwibnJvdyI6NiwibmNvbCI6MjN9LCJyZGYiOiJINHNJQUFBQUFBQUFCdVZXVFhQYlJCaFcvSlhhK1NBTXpPUlNncHBoaHBNc1cvNlNHVXBsTzZsbklCalhia0k0bWJXOHNZVmxyV2ExamtzdjlFQlBuRGpDcFROdzUwcC9CSnc1Y3k0SGZrRmhWOUxLbHFJNDVJeG1wSGZmWi9kNTk5blBWNzJqODFMdVBDY0lRbEpJQ1FraG1hWkZJZFBxRnBXS0lnaXBCUFUyYUUyVzJTZTAxVnUwc0UvZkhkYk1yUlNFaEV1bnJlbWI5dkU5MTNyRTNPZUdJZlp0aEluakkyLzI1emJFNHFjQUcwaHNZdVRrL1lwZEQvb0VZQ0pTbG8rKzB6WEIxeENmV2xNTExhejNIYkVKQ0RIaEdLTzVOUXBpTG5zUmU5Q2gxcTg0N0tJcG5DR0xvaU5SRnRzWVFvdmFwam1INGhuRWpvR3NxT0NGWVVqT3F1QTlod21XWmt5ZE5LU0N1VjRQbVZLOTBpTFFlOWQyOWM0OXZZNDBqSk83N0VQQ3EzSnpOcHBTdFJRY1JXUmxRbk40aDA0S3VVQjR4bXQ3UURlc3NlOXQ5aWNJRVloanFkczlaRUtKVFNvamhEdlpPUFlMd28wQUxZUzV5ZVdTSlR2SC9hdG9vdHVLQWR2TlNKdzdIY01pMEJxaC8ranZkVStiYmJHRk1CMGtJR3c5YitLRis5dm11SGpjT0xvbGRsM2ZjVzF6YlRDRDRrTU13WlI1VE1FeitvbDcyZDVpOWRyQmIrejVYWHZQQXpYeHduMisrWnQ1bXo5cG9vOGZldTA0ajljSDdRNUw3aFA0OTM1Z3o0L2NEL3A3L0d2dXZ2M3pIOXJSd2N0SHI1Ni9xelcvZi9YODRHVlBhNTU0T3JUdnFQdm9MKzBCYVAveTl0TS9yK3Z2SnZ0LzRXa3Z6cjMxZVpIeTdaZSsvZGEzSTkrcWd2L3NDY3VkS1VUc1ZyRklKbUxEeG1KUkRhQVNoVHJvY2drdFdlRm82b1FRK3dOWlhpd1crY3V4UHFHMzF0TzhqbWJ5bU81TFdhbFdhL0x5VnBJZllEaW0rL2wrd3pSOS9rZHIrZFZ5cFNKSDc4bVlLQit1ajFLdnFuTDRWbzJKY2JKK0pNVktYVlhsZGJkd1RFeHRmY3h5dFZLVnIxemF0OVpXTHBRS3N1MWxKSGJIUzJPV2o2UWh6VWJTcFplTlFqSERxVGJ1alQvdjl5TDN4Tlh6dnJvekpGZWNJdy9SRXlwWHZwaWI1a0JSS2lwZDA4WU1Za01IRHpHeWlLN3IrYTlzbm1QdWhrbHF2YVlvdFVLNFRWeGd0VjVTeW1yaCtzQ3hwRUpGVWN1bDI1RnFTcjFTS0JkdlI2cVd5MHFwVkl1U2JKWXFRejlFYVl0eC9abmM5OEZVRDFoVFh1N1FCanozRElFRHJhV2Zia01MYzJmcnVOOXJEbm8wZndRSlBKcmVzOTM1MERTY1NaRFNzMGZ3RXBySURvRGRzM2JMM1d5RHZvNkMwTnN0YkJCREQyRzVVd2ZpRUxMekdCRmdEdm9UdzdicGY0ZFBiWnRveUZCZ3d1Q3ZvOU1JK2RsdTR5VGM0T051eU4vNmpFeFlaeXRRNmdzSXVPaXRFK0NRd2FrOUFvUnJTYzR4UDBvWmh3QXk1N3lkTS84ME9TdktONDNaZU1BWTRiWEpZclRJOC9WaEp5anh6THNQTTlGRjFFM2c4RVhrWUk3S0Fma0x6SlpMRUY1SEtKdklab21la2hMc2R6Z2RJVy9nQ1BERzNHSktScEkrb1plUlZCUzgzTS9QNzQ1dk15dmxmYS9MeEQ5K3FEU2ZFR2lORFN2WVF5WVlRajVYdTNURTdvRHpOcWEvSG53a0ZIWHloSzB1UjNSa2NzUWRtL0Q2WHlpZlV4Y0dEQUFBIn0= -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>##Research Question: What video games are the most popular based on critic reviews? This will be based on sale numbers and I also plan to break the popularity down by figuring out which games have the most popular critic score and cross referencing that with sales data to see if high critic score correlates with better sales.</p>
+<p>I found the data sets on Kaggle and downloaded the .csv files from the Kaggle website.</p>
+<p>##Meta Critic Games The first data set I used is Video Game Sales 2019 from Kaggle. It was gathered by Andrea Cadeddu who is a user at on Kaggle and can be found at: <a href="https://www.kaggle.com/skateddu/metacritic-games-stats-20112019" class="uri">https://www.kaggle.com/skateddu/metacritic-games-stats-20112019</a>. She gathered this data containing meta critic scores for video games. The data set was last updated in 2019, so it has current game data included to go along with the sales data in the Video Game Sales dataset. Below, you can see a snippet of the data along with some summary statistics.</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuaGVhZChtZXRhY3JpdGljX2dhbWVzKVxuYGBgIn0= -->
+<pre class="r"><code>head(metacritic_games)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbImRhdGEuZnJhbWUiXSwibnJvdyI6NiwibmNvbCI6MTV9LCJyZGYiOiJINHNJQUFBQUFBQUFCcVZWWDI4U1FSQS9hTUdDYlNGV0g0d3ZHMTk4MEpJQ0dwVTNXa2lOS1JRQmE0T0paSHMzd0lWbDk3SzNSK0hORCtNMzhRdjVibEtkZzEzZ3JqV2FlTWxrWjMvemIyZDJacTlkdXl4bkw3T1daVzFaMjFiUzJrb2hhNlZQV3NYU3E1SmxiU2R4bDBCSkpseG5xSFdBVEE0cEg2cHB3VTVMU0VVWktlbjlrKzRJU0owNUlFbkhsb0l4bjF4VVNHYzhsKzVFcXp3TFZjNWdDTndoWWtCNndCeGFJZWMybFM2bklkSjFKMERLTmExK2NFelZoUElLcWNyeGlFN0lpYXZtUnRRSlBBelVRRXVCQnVTTWNrZUxIdGNnOEVsOVZpSHZBclFtYlpnS0ZpaFg4RmdDeWRiSkxXNnJYT3Y4RFl4NjJiK2diQXFrSXdicW1rclE2S05qVUNQd0hVcE9LYWJVVVlIakNsOEwwNmZ0ZXE5M3JuY1Ayc0llK3dxb000L3A3VFJkcnJCV1F1OXpUWGMyQTM4ZEszcVNkTlZlWkxuYzdiWUZnOE1XbzNPWER6VzIxM0I5R3hpakhFUmdvdVNYWnFUcVRJR3JZSlZDMUozWlJVTmFKdDJtSU9lY3VSeElJMkRLOVRBc3lIOFIvbytINkZtMjY4V2o1NlpwRzNlQlhjUFUxMnBSSDd0VlQ1TGlteGVrZEZRc0dxd3BwcVI0Rk1YZUI1d1UzOTdXS3hYdnNDMUhzV293SkNXRDRhVXM0bHRXR1lrZ2RjTlpRdnFBOUhKRG5yQ1dYM3cxOGo5OVdwNytodFJDczlEM0Q2U2YyTTA3Ry9aamxCM2oraERwYVRpc1NONkdITitBeEhkY1UvcDg5NUdhRy9JKzBoZE5uNUY2bW93ODVOdDYvYVR6L0JoN2JGSWNwOFhYbDVJemR6aEUwSXdFWHIwYUNHbGVsSXdEVTJEQ1c3VktDaCtYVlF2djgyQnlCYksvN0pmVitFbXExak94SzRFQjlhSHZVR1hzOHA3d1hlVk9vVzlMWEcxam1lTVFLRWxaRE01ekdOSTcxUGRYYmdKL0hYN1BPTmtFOTFjdU50SE1CQlQxYmJGS0tCdEsrMHNrV3JtTUZOY0ZVNzJ3NU1tdnkrdFB4MHRzTStxYkVoc3dpOG5Ud2tDR2hiYXNtNWpKUGVHRnM0OUd5UVBkQUp2R0NSa0Q4Z0VQVCtJYzJxT0FqdzlmbDhJSXVtTVQrbmdKM1JXR3p5MWpKbjlwWHlseldjQ0hPUGZtOEl4ZUFUTTF3NVFYR1JjOC9IOG9rd3FpZmtFSi9EVVp4QmJNSUl2a3JKdmZEZFlhUmdFSEFBQT0ifQ== -->
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["Rank"],"name":[1],"type":["int"],"align":["right"]},{"label":["Name"],"name":[2],"type":["chr"],"align":["left"]},{"label":["basename"],"name":[3],"type":["chr"],"align":["left"]},{"label":["Genre"],"name":[4],"type":["chr"],"align":["left"]},{"label":["ESRB_Rating"],"name":[5],"type":["chr"],"align":["left"]},{"label":["Platform"],"name":[6],"type":["chr"],"align":["left"]},{"label":["Publisher"],"name":[7],"type":["chr"],"align":["left"]},{"label":["Developer"],"name":[8],"type":["chr"],"align":["left"]},{"label":["VGChartz_Score"],"name":[9],"type":["lgl"],"align":["right"]},{"label":["Critic_Score"],"name":[10],"type":["dbl"],"align":["right"]},{"label":["User_Score"],"name":[11],"type":["dbl"],"align":["right"]},{"label":["Total_Shipped"],"name":[12],"type":["dbl"],"align":["right"]},{"label":["Global_Sales"],"name":[13],"type":["dbl"],"align":["right"]},{"label":["NA_Sales"],"name":[14],"type":["dbl"],"align":["right"]},{"label":["PAL_Sales"],"name":[15],"type":["dbl"],"align":["right"]},{"label":["JP_Sales"],"name":[16],"type":["dbl"],"align":["right"]},{"label":["Other_Sales"],"name":[17],"type":["dbl"],"align":["right"]},{"label":["Year"],"name":[18],"type":["dbl"],"align":["right"]},{"label":["Last_Update"],"name":[19],"type":["chr"],"align":["left"]},{"label":["url"],"name":[20],"type":["chr"],"align":["left"]},{"label":["status"],"name":[21],"type":["int"],"align":["right"]},{"label":["Vgchartzscore"],"name":[22],"type":["dbl"],"align":["right"]},{"label":["img_url"],"name":[23],"type":["chr"],"align":["left"]}],"data":[{"1":"1","2":"Wii Sports","3":"wii-sports","4":"Sports","5":"E","6":"Wii","7":"Nintendo","8":"Nintendo EAD","9":"NA","10":"7.7","11":"NA","12":"82.86","13":"NA","14":"NA","15":"NA","16":"NA","17":"NA","18":"2006","19":"","20":"http://www.vgchartz.com/game/2667/wii-sports/?region=All","21":"1","22":"NA","23":"/games/boxart/full_2258645AmericaFrontccc.jpg","_rn_":"1"},{"1":"2","2":"Super Mario Bros.","3":"super-mario-bros","4":"Platform","5":"","6":"NES","7":"Nintendo","8":"Nintendo EAD","9":"NA","10":"10.0","11":"NA","12":"40.24","13":"NA","14":"NA","15":"NA","16":"NA","17":"NA","18":"1985","19":"","20":"http://www.vgchartz.com/game/6455/super-mario-bros/?region=All","21":"1","22":"NA","23":"/games/boxart/8972270ccc.jpg","_rn_":"2"},{"1":"3","2":"Mario Kart Wii","3":"mario-kart-wii","4":"Racing","5":"E","6":"Wii","7":"Nintendo","8":"Nintendo EAD","9":"NA","10":"8.2","11":"9.1","12":"37.14","13":"NA","14":"NA","15":"NA","16":"NA","17":"NA","18":"2008","19":"11th Apr 18","20":"http://www.vgchartz.com/game/6968/mario-kart-wii/?region=All","21":"1","22":"8.7","23":"/games/boxart/full_8932480AmericaFrontccc.jpg","_rn_":"3"},{"1":"4","2":"PlayerUnknown's Battlegrounds","3":"playerunknowns-battlegrounds","4":"Shooter","5":"","6":"PC","7":"PUBG Corporation","8":"PUBG Corporation","9":"NA","10":"NA","11":"NA","12":"36.60","13":"NA","14":"NA","15":"NA","16":"NA","17":"NA","18":"2017","19":"13th Nov 18","20":"http://www.vgchartz.com/game/215988/playerunknowns-battlegrounds/?region=All","21":"1","22":"NA","23":"/games/boxart/full_8052843AmericaFrontccc.jpg","_rn_":"4"},{"1":"5","2":"Wii Sports Resort","3":"wii-sports-resort","4":"Sports","5":"E","6":"Wii","7":"Nintendo","8":"Nintendo EAD","9":"NA","10":"8.0","11":"8.8","12":"33.09","13":"NA","14":"NA","15":"NA","16":"NA","17":"NA","18":"2009","19":"","20":"http://www.vgchartz.com/game/24656/wii-sports-resort/?region=All","21":"1","22":"8.8","23":"/games/boxart/full_7295041AmericaFrontccc.jpg","_rn_":"5"},{"1":"6","2":"Pokemon Red / Green / Blue Version","3":"pokmon-red","4":"Role-Playing","5":"E","6":"GB","7":"Nintendo","8":"Game Freak","9":"NA","10":"9.4","11":"NA","12":"31.38","13":"NA","14":"NA","15":"NA","16":"NA","17":"NA","18":"1998","19":"","20":"http://www.vgchartz.com/game/4030/pokemon-red-green-blue-version/?region=All","21":"1","22":"NA","23":"/games/boxart/full_6442337AmericaFrontccc.png","_rn_":"6"}],"options":{"columns":{"min":{},"max":[10],"total":[23]},"rows":{"min":[10],"max":[10],"total":[6]},"pages":{}}}
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["game"],"name":[1],"type":["chr"],"align":["left"]},{"label":["platform"],"name":[2],"type":["chr"],"align":["left"]},{"label":["developer"],"name":[3],"type":["chr"],"align":["left"]},{"label":["genre"],"name":[4],"type":["chr"],"align":["left"]},{"label":["number_players"],"name":[5],"type":["chr"],"align":["left"]},{"label":["rating"],"name":[6],"type":["chr"],"align":["left"]},{"label":["release_date"],"name":[7],"type":["chr"],"align":["left"]},{"label":["positive_critics"],"name":[8],"type":["int"],"align":["right"]},{"label":["neutral_critics"],"name":[9],"type":["int"],"align":["right"]},{"label":["negative_critics"],"name":[10],"type":["int"],"align":["right"]},{"label":["positive_users"],"name":[11],"type":["int"],"align":["right"]},{"label":["neutral_users"],"name":[12],"type":["int"],"align":["right"]},{"label":["negative_users"],"name":[13],"type":["int"],"align":["right"]},{"label":["metascore"],"name":[14],"type":["int"],"align":["right"]},{"label":["user_score"],"name":[15],"type":["int"],"align":["right"]}],"data":[{"1":"Portal 2","2":"PC","3":"Valve Software","4":"Action","5":"","6":"E10+","7":"Apr 18, 2011","8":"51","9":"1","10":"0","11":"1700","12":"107","13":"19","14":"95","15":"90","_rn_":"1"},{"1":"The Elder Scrolls V: Skyrim","2":"PC","3":"Bethesda Game Studios","4":"Role-Playing","5":"No Online Multiplayer","6":"M","7":"Nov 10, 2011","8":"32","9":"0","10":"0","11":"1616","12":"322","13":"451","14":"94","15":"82","_rn_":"2"},{"1":"The Legend of Zelda: Ocarina of Time 3D","2":"3DS","3":"GREZZO","4":"Miscellaneous","5":"No Online Multiplayer","6":"E10+","7":"Jun 19, 2011","8":"84","9":"1","10":"0","11":"283","12":"20","13":"5","14":"94","15":"90","_rn_":"3"},{"1":"Batman: Arkham City","2":"PC","3":"Rocksteady Studios","4":"Action Adventure","5":"","6":"T","7":"Nov 21, 2011","8":"27","9":"0","10":"0","11":"240","12":"34","13":"27","14":"91","15":"87","_rn_":"4"},{"1":"Super Mario 3D Land","2":"3DS","3":"Nintendo","4":"Action","5":"No Online Multiplayer","6":"E","7":"Nov 13, 2011","8":"81","9":"1","10":"0","11":"251","12":"39","13":"11","14":"90","15":"84","_rn_":"5"},{"1":"Deus Ex: Human Revolution","2":"PC","3":"Nixxes Software","4":"Action","5":"No Online Multiplayer","6":"M","7":"Aug 23, 2011","8":"52","9":"0","10":"0","11":"520","12":"112","13":"78","14":"90","15":"85","_rn_":"6"}],"options":{"columns":{"min":{},"max":[10],"total":[15]},"rows":{"min":[10],"max":[10],"total":[6]},"pages":{}}}
   </script>
 </div>
 <!-- rnb-frame-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc3VtbWFyeSh2Z3NhbGVzLjEyLjQuMjAxOSlcbmBgYCJ9 -->
-<pre class="r"><code>summary(vgsales.12.4.2019)</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc3VtbWFyeShtZXRhY3JpdGljX2dhbWVzKVxuYGBgIn0= -->
+<pre class="r"><code>summary(metacritic_games)</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiICAgICAgUmFuayAgICAgICAgICAgTmFtZSAgICAgICAgICBcbiBNaW4uICAgOiAgICAxICAgTGVuZ3RoOjU1NzkyICAgICAgXG4gMXN0IFF1LjoxMzk0OSAgIENsYXNzIDpjaGFyYWN0ZXIgIFxuIE1lZGlhbiA6Mjc4OTcgICBNb2RlICA6Y2hhcmFjdGVyICBcbiBNZWFuICAgOjI3ODk3ICAgICAgICAgICAgICAgICAgICAgXG4gM3JkIFF1Ljo0MTg0NCAgICAgICAgICAgICAgICAgICAgIFxuIE1heC4gICA6NTU3OTIgICAgICAgICAgICAgICAgICAgICBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXG4gICBiYXNlbmFtZSAgICAgICAgICAgIEdlbnJlICAgICAgICAgIFxuIExlbmd0aDo1NTc5MiAgICAgICBMZW5ndGg6NTU3OTIgICAgICBcbiBDbGFzcyA6Y2hhcmFjdGVyICAgQ2xhc3MgOmNoYXJhY3RlciAgXG4gTW9kZSAgOmNoYXJhY3RlciAgIE1vZGUgIDpjaGFyYWN0ZXIgIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcbiBFU1JCX1JhdGluZyAgICAgICAgICBQbGF0Zm9ybSAgICAgICAgXG4gTGVuZ3RoOjU1NzkyICAgICAgIExlbmd0aDo1NTc5MiAgICAgIFxuIENsYXNzIDpjaGFyYWN0ZXIgICBDbGFzcyA6Y2hhcmFjdGVyICBcbiBNb2RlICA6Y2hhcmFjdGVyICAgTW9kZSAgOmNoYXJhY3RlciAgXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFxuICBQdWJsaXNoZXIgICAgICAgICAgRGV2ZWxvcGVyICAgICAgICBcbiBMZW5ndGg6NTU3OTIgICAgICAgTGVuZ3RoOjU1NzkyICAgICAgXG4gQ2xhc3MgOmNoYXJhY3RlciAgIENsYXNzIDpjaGFyYWN0ZXIgIFxuIE1vZGUgIDpjaGFyYWN0ZXIgICBNb2RlICA6Y2hhcmFjdGVyICBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXG4gVkdDaGFydHpfU2NvcmUgIENyaXRpY19TY29yZSAgICAgVXNlcl9TY29yZSAgIFxuIE1vZGU6bG9naWNhbCAgIE1pbi4gICA6IDEuMDAgICBNaW4uICAgOiAyLjAwICBcbiBOQSdzOjU1NzkyICAgICAxc3QgUXUuOiA2LjQwICAgMXN0IFF1LjogNy44MCAgXG4gICAgICAgICAgICAgICAgTWVkaWFuIDogNy41MCAgIE1lZGlhbiA6IDguNTAgIFxuICAgICAgICAgICAgICAgIE1lYW4gICA6IDcuMjEgICBNZWFuICAgOiA4LjI1ICBcbiAgICAgICAgICAgICAgICAzcmQgUXUuOiA4LjMwICAgM3JkIFF1LjogOS4xMCAgXG4gICAgICAgICAgICAgICAgTWF4LiAgIDoxMC4wMCAgIE1heC4gICA6MTAuMDAgIFxuICAgICAgICAgICAgICAgIE5BJ3MgICA6NDkyNTYgICBOQSdzICAgOjU1NDU3ICBcbiBUb3RhbF9TaGlwcGVkICAgIEdsb2JhbF9TYWxlcyAgICAgIE5BX1NhbGVzICAgIFxuIE1pbi4gICA6IDAuMDMgICBNaW4uICAgOiAwLjAwICAgTWluLiAgIDowLjAwICAgXG4gMXN0IFF1LjogMC4yMCAgIDFzdCBRdS46IDAuMDMgICAxc3QgUXUuOjAuMDUgICBcbiBNZWRpYW4gOiAwLjU5ICAgTWVkaWFuIDogMC4xMiAgIE1lZGlhbiA6MC4xMiAgIFxuIE1lYW4gICA6IDEuODkgICBNZWFuICAgOiAwLjM3ICAgTWVhbiAgIDowLjI4ICAgXG4gM3JkIFF1LjogMS44MCAgIDNyZCBRdS46IDAuMzYgICAzcmQgUXUuOjAuMjkgICBcbiBNYXguICAgOjgyLjg2ICAgTWF4LiAgIDoyMC4zMiAgIE1heC4gICA6OS43NiAgIFxuIE5BJ3MgICA6NTM5NjUgICBOQSdzICAgOjM2Mzc3ICAgTkEncyAgIDo0MjgyOCAgXG4gICBQQUxfU2FsZXMgICAgICAgIEpQX1NhbGVzICAgICAgT3RoZXJfU2FsZXMgICBcbiBNaW4uICAgOjAuMDAgICAgTWluLiAgIDowLjAwICAgIE1pbi4gICA6MC4wMCAgIFxuIDFzdCBRdS46MC4wMSAgICAxc3QgUXUuOjAuMDIgICAgMXN0IFF1LjowLjAwICAgXG4gTWVkaWFuIDowLjA0ICAgIE1lZGlhbiA6MC4wNSAgICBNZWRpYW4gOjAuMDEgICBcbiBNZWFuICAgOjAuMTYgICAgTWVhbiAgIDowLjExICAgIE1lYW4gICA6MC4wNCAgIFxuIDNyZCBRdS46MC4xNCAgICAzcmQgUXUuOjAuMTIgICAgM3JkIFF1LjowLjA0ICAgXG4gTWF4LiAgIDo5Ljg1ICAgIE1heC4gICA6Mi42OSAgICBNYXguICAgOjMuMTIgICBcbiBOQSdzICAgOjQyNjAzICAgTkEncyAgIDo0ODc0OSAgIE5BJ3MgICA6NDAyNzAgIFxuICAgICAgWWVhciAgICAgIExhc3RfVXBkYXRlICAgICAgIFxuIE1pbi4gICA6MTk3MCAgIExlbmd0aDo1NTc5MiAgICAgIFxuIDFzdCBRdS46MjAwMCAgIENsYXNzIDpjaGFyYWN0ZXIgIFxuIE1lZGlhbiA6MjAwOCAgIE1vZGUgIDpjaGFyYWN0ZXIgIFxuIE1lYW4gICA6MjAwNiAgICAgICAgICAgICAgICAgICAgIFxuIDNyZCBRdS46MjAxMSAgICAgICAgICAgICAgICAgICAgIFxuIE1heC4gICA6MjAyMCAgICAgICAgICAgICAgICAgICAgIFxuIE5BJ3MgICA6OTc5ICAgICAgICAgICAgICAgICAgICAgIFxuICAgICB1cmwgICAgICAgICAgICAgICAgc3RhdHVzICBWZ2NoYXJ0enNjb3JlICBcbiBMZW5ndGg6NTU3OTIgICAgICAgTWluLiAgIDoxICAgTWluLiAgIDoyLjYwICAgXG4gQ2xhc3MgOmNoYXJhY3RlciAgIDFzdCBRdS46MSAgIDFzdCBRdS46Ni44MCAgIFxuIE1vZGUgIDpjaGFyYWN0ZXIgICBNZWRpYW4gOjEgICBNZWRpYW4gOjcuODAgICBcbiAgICAgICAgICAgICAgICAgICAgTWVhbiAgIDoxICAgTWVhbiAgIDo3LjQzICAgXG4gICAgICAgICAgICAgICAgICAgIDNyZCBRdS46MSAgIDNyZCBRdS46OC41MCAgIFxuICAgICAgICAgICAgICAgICAgICBNYXguICAgOjEgICBNYXguICAgOjkuNjAgICBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgTkEncyAgIDo1NDk5MyAgXG4gICBpbWdfdXJsICAgICAgICAgXG4gTGVuZ3RoOjU1NzkyICAgICAgXG4gQ2xhc3MgOmNoYXJhY3RlciAgXG4gTW9kZSAgOmNoYXJhY3RlciAgXG4gICAgICAgICAgICAgICAgICAgXG4gICAgICAgICAgICAgICAgICAgXG4gICAgICAgICAgICAgICAgICAgXG4gICAgICAgICAgICAgICAgICAgXG4ifQ== -->
-<pre><code>      Rank           Name          
- Min.   :    1   Length:55792      
- 1st Qu.:13949   Class :character  
- Median :27897   Mode  :character  
- Mean   :27897                     
- 3rd Qu.:41844                     
- Max.   :55792                     
-                                   
-   basename            Genre          
- Length:55792       Length:55792      
+<!-- rnb-output-begin eyJkYXRhIjoiICAgICBnYW1lICAgICAgICAgICAgIHBsYXRmb3JtICAgICAgICBcbiBMZW5ndGg6NTY5OSAgICAgICAgTGVuZ3RoOjU2OTkgICAgICAgXG4gQ2xhc3MgOmNoYXJhY3RlciAgIENsYXNzIDpjaGFyYWN0ZXIgIFxuIE1vZGUgIDpjaGFyYWN0ZXIgICBNb2RlICA6Y2hhcmFjdGVyICBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcbiAgZGV2ZWxvcGVyICAgICAgICAgICAgZ2VucmUgICAgICAgICAgXG4gTGVuZ3RoOjU2OTkgICAgICAgIExlbmd0aDo1Njk5ICAgICAgIFxuIENsYXNzIDpjaGFyYWN0ZXIgICBDbGFzcyA6Y2hhcmFjdGVyICBcbiBNb2RlICA6Y2hhcmFjdGVyICAgTW9kZSAgOmNoYXJhY3RlciAgXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXG4gbnVtYmVyX3BsYXllcnMgICAgICAgIHJhdGluZyAgICAgICAgIFxuIExlbmd0aDo1Njk5ICAgICAgICBMZW5ndGg6NTY5OSAgICAgICBcbiBDbGFzcyA6Y2hhcmFjdGVyICAgQ2xhc3MgOmNoYXJhY3RlciAgXG4gTW9kZSAgOmNoYXJhY3RlciAgIE1vZGUgIDpjaGFyYWN0ZXIgIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFxuIHJlbGVhc2VfZGF0ZSAgICAgICBwb3NpdGl2ZV9jcml0aWNzXG4gTGVuZ3RoOjU2OTkgICAgICAgIE1pbi4gICA6ICAwLjAwICBcbiBDbGFzcyA6Y2hhcmFjdGVyICAgMXN0IFF1LjogIDMuMDAgIFxuIE1vZGUgIDpjaGFyYWN0ZXIgICBNZWRpYW4gOiAgOC4wMCAgXG4gICAgICAgICAgICAgICAgICAgIE1lYW4gICA6IDEzLjM1ICBcbiAgICAgICAgICAgICAgICAgICAgM3JkIFF1LjogMTcuMDAgIFxuICAgICAgICAgICAgICAgICAgICBNYXguICAgOjExOC4wMCAgXG4gbmV1dHJhbF9jcml0aWNzICBuZWdhdGl2ZV9jcml0aWNzXG4gTWluLiAgIDogMC4wMDAgICBNaW4uICAgOiAwLjAwMCAgXG4gMXN0IFF1LjogMy4wMDAgICAxc3QgUXUuOiAwLjAwMCAgXG4gTWVkaWFuIDogNi4wMDAgICBNZWRpYW4gOiAwLjAwMCAgXG4gTWVhbiAgIDogNy45NTkgICBNZWFuICAgOiAxLjE0NiAgXG4gM3JkIFF1LjoxMC4wMDAgICAzcmQgUXUuOiAxLjAwMCAgXG4gTWF4LiAgIDo2NS4wMDAgICBNYXguICAgOjUxLjAwMCAgXG4gcG9zaXRpdmVfdXNlcnMgICAgbmV1dHJhbF91c2VycyAgICBcbiBNaW4uICAgOiAgIDAuMDAgICBNaW4uICAgOiAgMC4wMDAgIFxuIDFzdCBRdS46ICAgMi4wMCAgIDFzdCBRdS46ICAxLjAwMCAgXG4gTWVkaWFuIDogICA1LjAwICAgTWVkaWFuIDogIDIuMDAwICBcbiBNZWFuICAgOiAgMjguNzUgICBNZWFuICAgOiAgOC42MzcgIFxuIDNyZCBRdS46ICAxNy4wMCAgIDNyZCBRdS46ICA2LjAwMCAgXG4gTWF4LiAgIDoyNzYyLjAwICAgTWF4LiAgIDo1MDYuMDAwICBcbiBuZWdhdGl2ZV91c2VycyAgICAgIG1ldGFzY29yZSAgICBcbiBNaW4uICAgOiAgIDAuMDAgICBNaW4uICAgOjExLjAwICBcbiAxc3QgUXUuOiAgIDAuMDAgICAxc3QgUXUuOjY2LjAwICBcbiBNZWRpYW4gOiAgIDEuMDAgICBNZWRpYW4gOjczLjAwICBcbiBNZWFuICAgOiAgMTQuMzcgICBNZWFuICAgOjcxLjg2ICBcbiAzcmQgUXUuOiAgIDUuMDAgICAzcmQgUXUuOjgwLjAwICBcbiBNYXguICAgOjI5OTguMDAgICBNYXguICAgOjk3LjAwICBcbiAgIHVzZXJfc2NvcmUgICBcbiBNaW4uICAgOiAxLjAwICBcbiAxc3QgUXUuOjYxLjAwICBcbiBNZWRpYW4gOjcwLjAwICBcbiBNZWFuICAgOjY3LjE0ICBcbiAzcmQgUXUuOjc2LjAwICBcbiBNYXguICAgOjk0LjAwICBcbiJ9 -->
+<pre><code>     game             platform        
+ Length:5699        Length:5699       
  Class :character   Class :character  
  Mode  :character   Mode  :character  
                                       
                                       
                                       
-                                      
- ESRB_Rating          Platform        
- Length:55792       Length:55792      
+  developer            genre          
+ Length:5699        Length:5699       
  Class :character   Class :character  
  Mode  :character   Mode  :character  
                                       
                                       
                                       
-                                      
-  Publisher          Developer        
- Length:55792       Length:55792      
+ number_players        rating         
+ Length:5699        Length:5699       
  Class :character   Class :character  
  Mode  :character   Mode  :character  
                                       
                                       
                                       
-                                      
- VGChartz_Score  Critic_Score     User_Score   
- Mode:logical   Min.   : 1.00   Min.   : 2.00  
- NA&#39;s:55792     1st Qu.: 6.40   1st Qu.: 7.80  
-                Median : 7.50   Median : 8.50  
-                Mean   : 7.21   Mean   : 8.25  
-                3rd Qu.: 8.30   3rd Qu.: 9.10  
-                Max.   :10.00   Max.   :10.00  
-                NA&#39;s   :49256   NA&#39;s   :55457  
- Total_Shipped    Global_Sales      NA_Sales    
- Min.   : 0.03   Min.   : 0.00   Min.   :0.00   
- 1st Qu.: 0.20   1st Qu.: 0.03   1st Qu.:0.05   
- Median : 0.59   Median : 0.12   Median :0.12   
- Mean   : 1.89   Mean   : 0.37   Mean   :0.28   
- 3rd Qu.: 1.80   3rd Qu.: 0.36   3rd Qu.:0.29   
- Max.   :82.86   Max.   :20.32   Max.   :9.76   
- NA&#39;s   :53965   NA&#39;s   :36377   NA&#39;s   :42828  
-   PAL_Sales        JP_Sales      Other_Sales   
- Min.   :0.00    Min.   :0.00    Min.   :0.00   
- 1st Qu.:0.01    1st Qu.:0.02    1st Qu.:0.00   
- Median :0.04    Median :0.05    Median :0.01   
- Mean   :0.16    Mean   :0.11    Mean   :0.04   
- 3rd Qu.:0.14    3rd Qu.:0.12    3rd Qu.:0.04   
- Max.   :9.85    Max.   :2.69    Max.   :3.12   
- NA&#39;s   :42603   NA&#39;s   :48749   NA&#39;s   :40270  
-      Year      Last_Update       
- Min.   :1970   Length:55792      
- 1st Qu.:2000   Class :character  
- Median :2008   Mode  :character  
- Mean   :2006                     
- 3rd Qu.:2011                     
- Max.   :2020                     
- NA&#39;s   :979                      
-     url                status  Vgchartzscore  
- Length:55792       Min.   :1   Min.   :2.60   
- Class :character   1st Qu.:1   1st Qu.:6.80   
- Mode  :character   Median :1   Median :7.80   
-                    Mean   :1   Mean   :7.43   
-                    3rd Qu.:1   3rd Qu.:8.50   
-                    Max.   :1   Max.   :9.60   
-                                NA&#39;s   :54993  
-   img_url         
- Length:55792      
- Class :character  
- Mode  :character  
-                   
-                   
-                   
-                   </code></pre>
+ release_date       positive_critics
+ Length:5699        Min.   :  0.00  
+ Class :character   1st Qu.:  3.00  
+ Mode  :character   Median :  8.00  
+                    Mean   : 13.35  
+                    3rd Qu.: 17.00  
+                    Max.   :118.00  
+ neutral_critics  negative_critics
+ Min.   : 0.000   Min.   : 0.000  
+ 1st Qu.: 3.000   1st Qu.: 0.000  
+ Median : 6.000   Median : 0.000  
+ Mean   : 7.959   Mean   : 1.146  
+ 3rd Qu.:10.000   3rd Qu.: 1.000  
+ Max.   :65.000   Max.   :51.000  
+ positive_users    neutral_users    
+ Min.   :   0.00   Min.   :  0.000  
+ 1st Qu.:   2.00   1st Qu.:  1.000  
+ Median :   5.00   Median :  2.000  
+ Mean   :  28.75   Mean   :  8.637  
+ 3rd Qu.:  17.00   3rd Qu.:  6.000  
+ Max.   :2762.00   Max.   :506.000  
+ negative_users      metascore    
+ Min.   :   0.00   Min.   :11.00  
+ 1st Qu.:   0.00   1st Qu.:66.00  
+ Median :   1.00   Median :73.00  
+ Mean   :  14.37   Mean   :71.86  
+ 3rd Qu.:   5.00   3rd Qu.:80.00  
+ Max.   :2998.00   Max.   :97.00  
+   user_score   
+ Min.   : 1.00  
+ 1st Qu.:61.00  
+ Median :70.00  
+ Mean   :67.14  
+ 3rd Qu.:76.00  
+ Max.   :94.00  </code></pre>
 <!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
-<p>This dataset was originally collected as a continuation work of the second dataset I used, Video Game Sales. He explains that he scraped the data using a script and collected it into a .csv file.</p>
-<p>A case in this dataset describes a video game and its respective sales data that includes the year 2019, which the first dataset does not include. Each video game is its own separate case.</p>
-<p>I plan to use the Name, Genre, Critic_Score, and User_Score from this dataset to explore the most popular titles of 2019.</p>
+<p>This data set does not have much information on how it was collected and maintained, however it can be assumed she scraped the data from a meta critic score website.</p>
+<p>A case in this dataset describes a video game and its respective critic and user score, whether positive, neutral, or negative. It also includes the platform, genre, and rating.</p>
+<p>I plan to use the game, platform, genre, positive_critics, and negative_critics in conjunction with the other dataset to conclude popular video games and their ratings.</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubnJvdyh2Z3NhbGVzLjEyLjQuMjAxOSlcbmBgYCJ9 -->
-<pre class="r"><code>nrow(vgsales.12.4.2019)</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubnJvdyhtZXRhY3JpdGljX2dhbWVzKVxuYGBgIn0= -->
+<pre class="r"><code>nrow(metacritic_games)</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDU1NzkyXG4ifQ== -->
-<pre><code>[1] 55792</code></pre>
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDU2OTlcbiJ9 -->
+<pre><code>[1] 5699</code></pre>
 <!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
-<p>The dataset has a lot of rows for exploration at 55,792 rows in total.</p>
-<p>##Video Game Sales The second dataset I</p>
+<p>The dataset has a lot of rows for exploration at 5,699 rows in total.</p>
+<p>##Video Game Sales The second dataset I chose is the Video Game Sales data set. This dataset was collected by Gregory Smith who is a data engineer at Petzl America. This is the second version of the data and has not been updated for 4 years. It can be found at: <a href="https://www.kaggle.com/gregorut/videogamesales" class="uri">https://www.kaggle.com/gregorut/videogamesales</a>. I plan to use this dataset as a supplementary data source for the meta critic games dataset by using it to analyze how well rated games sold in both the North American and Global Markets. Below, you can see a snippet of the data and the columns included in the data set.</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuaGVhZCh2Z3NhbGVzKVxuYGBgIn0= -->
+<pre class="r"><code>head(vgsales)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbImRhdGEuZnJhbWUiXSwibnJvdyI6NiwibmNvbCI6MTF9LCJyZGYiOiJINHNJQUFBQUFBQUFCcTFVejI4U1FSUWVsaDh0Q3hKTWV6QXhRVXhNMHg2QUZvSXRCMlNLTkJpTlNLR21OVEdhQWFidGhtVUhaNWVvZVBIaXhVdi9DRDNqd1V0UEh1ckJQOEZ6UFRYUmc1ZGVxek96TThDU2VuT1R6YnozdmU5N2I5N3VtMmxVOW5MNm5nNEE4SU1BMElBL3lFd1F1bHRmeSthekFBUTA1dmxZSk16WFY0eTF3SXdJZTY5d21nZ0NvQWs1WTdNM0tQRzRXRjJodm1zWXlXYWZVTWVXeU5YbW9JOXA4aUdpQmttV0tiSFRNaEJ6b1FlSU9rbW1VdlJKZ21RRDIyeVZnV3QxMHNVOVlqRzBrMUYyMlJ4Z0dRL3RZSWNhOXN4Ky9KUE0vdHBXOHhKMFltclY4cFRselJQSXJxN2VWdlphWVNNL2hXOU0yWVVKcHpETkw4emtDM20rMFh6ZFJNNCtvVDBWYmFDMllSMWN5bzAyaUlsVFRQQjZpbEVmREljbW5xa3hYek1zQjFzZDh0OTk5dk40SFZqNWNyejk4OTBOV0Z3Y25sWkhpekR6T2NjZm1IbkxSd3ZBcGZmRi9vZnZPbHdYY0c2c0t3WVRYQWlqTEZqc2Y0UXJKMGRQbDgrL3dpV0ozL3cyWWhudlFjM05POWJGbHM4WmN3VmVGMm1MTU1iSWllTUcxS1YvU3l3dllKeXJocWRqWFpMVHRuK1Z6bVE5WGFSOUErZEdva0RwdDlndUtQM2cyemc1R3V0MlBna2ZWaEp1bjV0bmJuMG8reXM5Yy9FN1piSC9tVU1VdEZBUHE0R01xR0ZvSUt1cjdCb2ovR01FQWs4d29pcFJGVnRVRWNQMVFjczA3RU5NeDc5bDgza1RtWGc4VEZ1UHZmNzl1c2VQUEhLWTJBTkZxeVpwSVZOaTNpN0NsTHhNcTA3NFZhQzV6Zk9qNzIyM2JTSmJ0YXRBdllNY2xONm52RkVBTG1Za2M2VHZHTVJpSW0xQlhpalRZaCtkQWVJRGkrK2trMm9mRHF4dWFqM1BLOGlieVNlMzU1TzNrcklqYmszdGo4d1ZWR2NHV3dlR3BiNXEwRVF0YktxYmliVXNPazczS1J0NTFRcEQ3YlJESEtSNGVwdVlDaEhOZ1l1L0pYTjAzMlVGQUFBPSJ9 -->
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["Rank"],"name":[1],"type":["int"],"align":["right"]},{"label":["Name"],"name":[2],"type":["chr"],"align":["left"]},{"label":["Platform"],"name":[3],"type":["chr"],"align":["left"]},{"label":["Year"],"name":[4],"type":["chr"],"align":["left"]},{"label":["Genre"],"name":[5],"type":["chr"],"align":["left"]},{"label":["Publisher"],"name":[6],"type":["chr"],"align":["left"]},{"label":["NA_Sales"],"name":[7],"type":["dbl"],"align":["right"]},{"label":["EU_Sales"],"name":[8],"type":["dbl"],"align":["right"]},{"label":["JP_Sales"],"name":[9],"type":["dbl"],"align":["right"]},{"label":["Other_Sales"],"name":[10],"type":["dbl"],"align":["right"]},{"label":["Global_Sales"],"name":[11],"type":["dbl"],"align":["right"]}],"data":[{"1":"1","2":"Wii Sports","3":"Wii","4":"2006","5":"Sports","6":"Nintendo","7":"41.49","8":"29.02","9":"3.77","10":"8.46","11":"82.74","_rn_":"1"},{"1":"2","2":"Super Mario Bros.","3":"NES","4":"1985","5":"Platform","6":"Nintendo","7":"29.08","8":"3.58","9":"6.81","10":"0.77","11":"40.24","_rn_":"2"},{"1":"3","2":"Mario Kart Wii","3":"Wii","4":"2008","5":"Racing","6":"Nintendo","7":"15.85","8":"12.88","9":"3.79","10":"3.31","11":"35.82","_rn_":"3"},{"1":"4","2":"Wii Sports Resort","3":"Wii","4":"2009","5":"Sports","6":"Nintendo","7":"15.75","8":"11.01","9":"3.28","10":"2.96","11":"33.00","_rn_":"4"},{"1":"5","2":"Pokemon Red/Pokemon Blue","3":"GB","4":"1996","5":"Role-Playing","6":"Nintendo","7":"11.27","8":"8.89","9":"10.22","10":"1.00","11":"31.37","_rn_":"5"},{"1":"6","2":"Tetris","3":"GB","4":"1989","5":"Puzzle","6":"Nintendo","7":"23.20","8":"2.26","9":"4.22","10":"0.58","11":"30.26","_rn_":"6"}],"options":{"columns":{"min":{},"max":[10],"total":[11]},"rows":{"min":[10],"max":[10],"total":[6]},"pages":{}}}
+  </script>
+</div>
+<!-- rnb-frame-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc3VtbWFyeSh2Z3NhbGVzKVxuYGBgIn0= -->
+<pre class="r"><code>summary(vgsales)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiICAgICAgUmFuayAgICAgICAgICAgTmFtZSAgICAgICAgICBcbiBNaW4uICAgOiAgICAxICAgTGVuZ3RoOjE2NTk4ICAgICAgXG4gMXN0IFF1LjogNDE1MSAgIENsYXNzIDpjaGFyYWN0ZXIgIFxuIE1lZGlhbiA6IDgzMDAgICBNb2RlICA6Y2hhcmFjdGVyICBcbiBNZWFuICAgOiA4MzAxICAgICAgICAgICAgICAgICAgICAgXG4gM3JkIFF1LjoxMjQ1MCAgICAgICAgICAgICAgICAgICAgIFxuIE1heC4gICA6MTY2MDAgICAgICAgICAgICAgICAgICAgICBcbiAgIFBsYXRmb3JtICAgICAgICAgICAgIFllYXIgICAgICAgICAgXG4gTGVuZ3RoOjE2NTk4ICAgICAgIExlbmd0aDoxNjU5OCAgICAgIFxuIENsYXNzIDpjaGFyYWN0ZXIgICBDbGFzcyA6Y2hhcmFjdGVyICBcbiBNb2RlICA6Y2hhcmFjdGVyICAgTW9kZSAgOmNoYXJhY3RlciAgXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXG4gICAgR2VucmUgICAgICAgICAgICBQdWJsaXNoZXIgICAgICAgIFxuIExlbmd0aDoxNjU5OCAgICAgICBMZW5ndGg6MTY1OTggICAgICBcbiBDbGFzcyA6Y2hhcmFjdGVyICAgQ2xhc3MgOmNoYXJhY3RlciAgXG4gTW9kZSAgOmNoYXJhY3RlciAgIE1vZGUgIDpjaGFyYWN0ZXIgIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFxuICAgIE5BX1NhbGVzICAgICAgICAgIEVVX1NhbGVzICAgICAgXG4gTWluLiAgIDogMC4wMDAwICAgTWluLiAgIDogMC4wMDAwICBcbiAxc3QgUXUuOiAwLjAwMDAgICAxc3QgUXUuOiAwLjAwMDAgIFxuIE1lZGlhbiA6IDAuMDgwMCAgIE1lZGlhbiA6IDAuMDIwMCAgXG4gTWVhbiAgIDogMC4yNjQ3ICAgTWVhbiAgIDogMC4xNDY3ICBcbiAzcmQgUXUuOiAwLjI0MDAgICAzcmQgUXUuOiAwLjExMDAgIFxuIE1heC4gICA6NDEuNDkwMCAgIE1heC4gICA6MjkuMDIwMCAgXG4gICAgSlBfU2FsZXMgICAgICAgICBPdGhlcl9TYWxlcyAgICAgIFxuIE1pbi4gICA6IDAuMDAwMDAgICBNaW4uICAgOiAwLjAwMDAwICBcbiAxc3QgUXUuOiAwLjAwMDAwICAgMXN0IFF1LjogMC4wMDAwMCAgXG4gTWVkaWFuIDogMC4wMDAwMCAgIE1lZGlhbiA6IDAuMDEwMDAgIFxuIE1lYW4gICA6IDAuMDc3NzggICBNZWFuICAgOiAwLjA0ODA2ICBcbiAzcmQgUXUuOiAwLjA0MDAwICAgM3JkIFF1LjogMC4wNDAwMCAgXG4gTWF4LiAgIDoxMC4yMjAwMCAgIE1heC4gICA6MTAuNTcwMDAgIFxuICBHbG9iYWxfU2FsZXMgICAgXG4gTWluLiAgIDogMC4wMTAwICBcbiAxc3QgUXUuOiAwLjA2MDAgIFxuIE1lZGlhbiA6IDAuMTcwMCAgXG4gTWVhbiAgIDogMC41Mzc0ICBcbiAzcmQgUXUuOiAwLjQ3MDAgIFxuIE1heC4gICA6ODIuNzQwMCAgXG4ifQ== -->
+<pre><code>      Rank           Name          
+ Min.   :    1   Length:16598      
+ 1st Qu.: 4151   Class :character  
+ Median : 8300   Mode  :character  
+ Mean   : 8301                     
+ 3rd Qu.:12450                     
+ Max.   :16600                     
+   Platform             Year          
+ Length:16598       Length:16598      
+ Class :character   Class :character  
+ Mode  :character   Mode  :character  
+                                      
+                                      
+                                      
+    Genre            Publisher        
+ Length:16598       Length:16598      
+ Class :character   Class :character  
+ Mode  :character   Mode  :character  
+                                      
+                                      
+                                      
+    NA_Sales          EU_Sales      
+ Min.   : 0.0000   Min.   : 0.0000  
+ 1st Qu.: 0.0000   1st Qu.: 0.0000  
+ Median : 0.0800   Median : 0.0200  
+ Mean   : 0.2647   Mean   : 0.1467  
+ 3rd Qu.: 0.2400   3rd Qu.: 0.1100  
+ Max.   :41.4900   Max.   :29.0200  
+    JP_Sales         Other_Sales      
+ Min.   : 0.00000   Min.   : 0.00000  
+ 1st Qu.: 0.00000   1st Qu.: 0.00000  
+ Median : 0.00000   Median : 0.01000  
+ Mean   : 0.07778   Mean   : 0.04806  
+ 3rd Qu.: 0.04000   3rd Qu.: 0.04000  
+ Max.   :10.22000   Max.   :10.57000  
+  Global_Sales    
+ Min.   : 0.0100  
+ 1st Qu.: 0.0600  
+ Median : 0.1700  
+ Mean   : 0.5374  
+ 3rd Qu.: 0.4700  
+ Max.   :82.7400  </code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>This dataset was also available in a .csv format from Kaggle which I was able to download and import into RStudio.</p>
+<p>A case in this dataset is the same as the last where one case represents video game sales for a particular video game in the year it was released.</p>
+<p>I plan to use the Name, Platform, Genre, Year, and NA_Sales columns in my data exploration. I plan to use these in conjunction with the Meta Critic Games data set columns.</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubnJvdyh2Z3NhbGVzKVxuYGBgIn0= -->
+<pre class="r"><code>nrow(vgsales)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDE2NTk4XG4ifQ== -->
+<pre><code>[1] 16598</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>Again, there are plenty of columns for use in this dataset with 16,598.</p>
+<p>##Informative Plots With the summary statistics above, I am planning to gauge popularity for the most popular video games by using both critic score and sales.</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuaGlnaGVzdF9yYW5rIDwtIHdoaWNoLm1heChtZXRhY3JpdGljX2dhbWVzJHBvc2l0aXZlX2NyaXRpY3MpXG5oaWdoZXN0X3JhbmtcbmBgYCJ9 -->
+<pre class="r"><code>highest_rank &lt;- which.max(metacritic_games$positive_critics)
+highest_rank</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDQ1MTNcbiJ9 -->
+<pre><code>[1] 4513</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucG9zIDwtIG1ldGFjcml0aWNfZ2FtZXMgJT4lIGZpbHRlcihwb3NpdGl2ZV9jcml0aWNzID4gMTAwKVxucG9zXG5gYGAifQ== -->
+<pre class="r"><code>pos &lt;- metacritic_games %&gt;% filter(positive_critics &gt; 100)
+pos</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbImRhdGEuZnJhbWUiXSwibnJvdyI6NiwibmNvbCI6MTV9LCJyZGYiOiJINHNJQUFBQUFBQUFCc1ZVelc0VE1SQjIwcVlsb1UyQ0tpNGdJZDk2b0ttYXRORFNBMUwvQ0Vpa3JicXRXb29nY25lbmlXRmpMMTV2U3poeDQ4cUJoK0VadVBFb1BBQ0YyY1RlN0lZaWpxejBhY2ZmWjQ4OTR4a2ZiSjhzbDA1S2hKQUpNa255WktLQUpwbmEycTgzSGpRSW1jempLSWRLTWY2L3gxbHphRlFRMVhpYUVlNGNDYmZMbEFhUHJxelREWHJZNVhBK0g5SWQ0WmtaODRkZG9NK2hBOEtqOHB5ZWd1K3hkYnFwZ09sdVRHaVVqN2x2cDg4NVVRQ0t0cGppa3U1NS9UQ0V2cEZ1UFpXS2Y1QUNmU2hKdDltbE1FS3BLUWUrajVteVhuRDlCZmg0RUNmZ0hxaGFpNG14azAvc095dkduSEl1dVhhNzE0NVMwOGJOckwrYnV5enFkSFdmYnN1T29XN3NjcUV4YnZtWGNiRVpnVkxjOTVraHFzN1dEbldZMEl5MnBPQ3U1U3ZQUkNoN2dqT1hObGtQd3JHdHA1c2dRREhmZXRsd05jYzBiWGdYSUhTa3dBWTI1TTFvNWtENlVOdjNXWitMemo5Vy9zbG5EMUE4Q3FpV3RMNUVEWEY3Rnk5UCtGd0FiVVcrNWdGdUErcS9pTm1UNWc2Tk1ibFRYN3AvaloxTXlMVkdUTmJIVEl2MU1kWUYybGlxUHh4eGl0TGxBYmRxdVQxWDA4WnFsbnNDWjdTeGx1VTJBb1hqQWJkbU9RY0NTbGNOUjhqc1lIOUNKT0lONGgwaXJ1Z0w4N2Q2YnRET3c2OWcvbE5qK25XZjBRcy9zWnUrb1l2dm1KWFBlTEZmMGI2Yld2OEY4UVB4R0JFaGVvak5sTDZOK0lTNGgrQkdYMGpwcnhETTRBWGlOZUk0cGNlNVBrS2NJaHpFeTZHZWVZd0tJdFVERlh1SEhTUnRuK0hWNjNPcGVyWThQY0RIUUFaSnFSVHdOVXFLdXl5aTNobW85ckJlUXRzc2l1bFJZOHdvOElHRjBQYVlUcG9pa0NIWC9BTGFyc0svYTFkV0JFUWF1M0dNcmdyb3NHdW1seE0zVVRqYWZ0WTZTWlBseEVXYUxmWkFzOUNWU1VDbFdHMFBtV3ptaWtwZUx0cnN4U25QZjB4S0pKdGkxMmVoVGJFbFN4ZzhXenhYY2FJSnVScGJNaTJEK0kzQVJmazVVM3pweFRrMVJsUWpFWi9FcTduZFNMeXRyVDZLZDBoVjZLeXhwMUoyWmJobi9wZnhWYkNYQmFLRGZXOFA3N016c0k5aEdVTWVSTHdZS0h4OWJTaklob3RhNnVUUkxMblN0OHdnT0hMMUc1OVJOaUloQndBQSJ9 -->
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["game"],"name":[1],"type":["chr"],"align":["left"]},{"label":["platform"],"name":[2],"type":["chr"],"align":["left"]},{"label":["developer"],"name":[3],"type":["chr"],"align":["left"]},{"label":["genre"],"name":[4],"type":["chr"],"align":["left"]},{"label":["number_players"],"name":[5],"type":["chr"],"align":["left"]},{"label":["rating"],"name":[6],"type":["chr"],"align":["left"]},{"label":["release_date"],"name":[7],"type":["chr"],"align":["left"]},{"label":["positive_critics"],"name":[8],"type":["int"],"align":["right"]},{"label":["neutral_critics"],"name":[9],"type":["int"],"align":["right"]},{"label":["negative_critics"],"name":[10],"type":["int"],"align":["right"]},{"label":["positive_users"],"name":[11],"type":["int"],"align":["right"]},{"label":["neutral_users"],"name":[12],"type":["int"],"align":["right"]},{"label":["negative_users"],"name":[13],"type":["int"],"align":["right"]},{"label":["metascore"],"name":[14],"type":["int"],"align":["right"]},{"label":["user_score"],"name":[15],"type":["int"],"align":["right"]}],"data":[{"1":"Uncharted 4: A Thief's End","2":"PS4","3":"Naughty Dog","4":"General","5":"Up to 10","6":"T","7":"May 10, 2016","8":"111","9":"1","10":"1","11":"1533","12":"148","13":"68","14":"93","15":"84"},{"1":"The Legend of Zelda: Breath of the Wild","2":"Switch","3":"Nintendo","4":"Action Adventure","5":"No Online Multiplayer","6":"E10+","7":"Mar  3, 2017","8":"106","9":"3","10":"0","11":"2762","12":"241","13":"135","14":"97","15":"85"},{"1":"Super Mario Odyssey","2":"Switch","3":"Nintendo","4":"Action","5":"No Online Multiplayer","6":"E10+","7":"Oct 27, 2017","8":"113","9":"0","10":"0","11":"977","12":"62","13":"30","14":"97","15":"90"},{"1":"Horizon Zero Dawn","2":"PS4","3":"Guerrilla","4":"Role-Playing","5":"No Online Multiplayer","6":"T","7":"Feb 28, 2017","8":"110","9":"5","10":"0","11":"1168","12":"117","13":"105","14":"89","15":"83"},{"1":"God of War","2":"PS4","3":"SCE Santa Monica","4":"Action Adventure","5":"No Online Multiplayer","6":"M","7":"Apr 20, 2018","8":"118","9":"0","10":"0","11":"2488","12":"109","13":"109","14":"94","15":"91"},{"1":"Marvel's Spider-Man","2":"PS4","3":"Insomniac Games","4":"Action Adventure","5":"No Online Multiplayer","6":"T","7":"Sep  7, 2018","8":"110","9":"6","10":"0","11":"795","12":"66","13":"44","14":"87","15":"87"}],"options":{"columns":{"min":{},"max":[10],"total":[15]},"rows":{"min":[10],"max":[10],"total":[6]},"pages":{}}}
+  </script>
+</div>
+<!-- rnb-frame-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>By filtering for games that were had more than 100 positiv critic scores, you are left with the 6 most popular games rated by critics.</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucG9zICU+JSBnZ3Bsb3QoYWVzKHggPSBnYW1lLHk9cG9zaXRpdmVfY3JpdGljcykpICsgZ2VvbV9wb2ludChhZXMoY29sb3I9Z2FtZSkpICsgdGhlbWUoYXhpcy50ZXh0LnggPSBlbGVtZW50X3RleHQoYW5nbGUgPSA2MCwgdmp1c3QgPSAxLCBoanVzdD0xKSlcbmBgYCJ9 -->
+<pre class="r"><code>pos %&gt;% ggplot(aes(x = game,y=positive_critics)) + geom_point(aes(color=game)) + theme(axis.text.x = element_text(angle = 60, vjust = 1, hjust=1))</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-plot-begin eyJoZWlnaHQiOjI1Ni40ODk1LCJ3aWR0aCI6NDE1LCJzaXplX2JlaGF2aW9yIjowLCJjb25kaXRpb25zIjpbXX0= -->
+<p><img src="data:image/png;base64,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" /></p>
+<!-- rnb-plot-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>Although this graph is a bit crowded in Rstudio, seeing it as a full graph you can see a visualization of the 6 most popular games according to critics, with God of War being the most popular.</p>
+<p>With this information, we can see how well God of War did in sales:</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudmdzYWxlcy4xMi40LjIwMTkgJT4lIGZpbHRlcihOYW1lID09IFwiR29kIG9mIFdhclwiKVxuYGBgIn0= -->
+<pre class="r"><code>vgsales.12.4.2019 %&gt;% filter(Name == &quot;God of War&quot;)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbImRhdGEuZnJhbWUiXSwibnJvdyI6MSwibmNvbCI6MjN9LCJyZGYiOiJINHNJQUFBQUFBQUFCcVZVM1c3VE1CUjIvMWJhMG9JQXFVamNCTzZiYUoyMkFSSmlvU3VWMERhaVpodmpxbklUTndsejdNaHgxakV1NERYZ0Jva0g0SjE0QTU1Z1lJZTRUWUs0d2xLU2M3N3o0L09iNmY3WlZ2dXNEUUNvZ1Rxb2dscERrR0JqWkcwT3Q0Y0ExS3VDcXdoSlMzNHZoZFpkUWZURjAwMEZvUEpRZkcvbmxOb1Q2bXAwb2IyQnJDenhxRHVnaThIeUw4bUc2ZkNBa2hKYU9Td0JOY3NlbHFBSE5pWHZ0UkVObzRRanBvMkplSE1Za0JBUlhsSzliNC9HcG1aRHdxRjJTRW5nUU0zbWlSdFFHWnJVK3dUUzA1UDAzcVBQOG54Ui9NZWZVdFQ4dHBMZnVmb3grWDd2dzcvay84dnZmVDBHMmNublVPWjNmYzZqcDRheFhDNzFDOC94SWVOWHVrTkR3NE1oTWg3dlBESFdOVGVlTStTSktqOHpNVjczTDMzS0llU3ZHS1MrWW1OT0w0VjNZNUZnUE52ZTJSSm4wd3dSRTJWOHlTamhqdVBvN3lLdk5ERU5JbTB6ai8wTXJFOGhPVmYwa1ZESTZCdHpHQ095NWhzVFJKaGlPbU43K21JMmhUd2dudEszTU9RTHlzS01iMW5KSEFleGo1Z0M5dEVGd2pSYUFiM1R5U2l0MGN4MjZNcjF6UkVMZU9BVXNQWkpqRmdCNlI1VER2SE05b01vUXE0eW5XQTZseWpFSXMwc3JDT3p3TGNzODZDbzhNb3E4SjNYM0plWDVhRDZXd1JWMEowREdQUFpTZVJDcm1LcEpReXIxWWs1NUlteTY1NW1ReERuSW04R29UZVRGc1hldEJoZDZxby91V2tvTnREQk1GWU5YQzJ5Q0FYcUN5WmJCY0IxeWFSSkk3bk13cWdxL3hXTmtuR2x2UHkzRWlLamNBZU9uNUR6d2E1YXgyemM4M09xNlA2Zks2dS9NbGNOVlF4RXZJQ3M1Z2ZET1ZKMTZvbHMwMlQxaUFYaTM1QmxJdEJZNTdLekNuRW9Wa2lhRzdqK0RaeXgvL2dqQlFBQSJ9 -->
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["Rank"],"name":[1],"type":["int"],"align":["right"]},{"label":["Name"],"name":[2],"type":["chr"],"align":["left"]},{"label":["basename"],"name":[3],"type":["chr"],"align":["left"]},{"label":["Genre"],"name":[4],"type":["chr"],"align":["left"]},{"label":["ESRB_Rating"],"name":[5],"type":["chr"],"align":["left"]},{"label":["Platform"],"name":[6],"type":["chr"],"align":["left"]},{"label":["Publisher"],"name":[7],"type":["chr"],"align":["left"]},{"label":["Developer"],"name":[8],"type":["chr"],"align":["left"]},{"label":["VGChartz_Score"],"name":[9],"type":["lgl"],"align":["right"]},{"label":["Critic_Score"],"name":[10],"type":["dbl"],"align":["right"]},{"label":["User_Score"],"name":[11],"type":["dbl"],"align":["right"]},{"label":["Total_Shipped"],"name":[12],"type":["dbl"],"align":["right"]},{"label":["Global_Sales"],"name":[13],"type":["dbl"],"align":["right"]},{"label":["NA_Sales"],"name":[14],"type":["dbl"],"align":["right"]},{"label":["PAL_Sales"],"name":[15],"type":["dbl"],"align":["right"]},{"label":["JP_Sales"],"name":[16],"type":["dbl"],"align":["right"]},{"label":["Other_Sales"],"name":[17],"type":["dbl"],"align":["right"]},{"label":["Year"],"name":[18],"type":["dbl"],"align":["right"]},{"label":["Last_Update"],"name":[19],"type":["chr"],"align":["left"]},{"label":["url"],"name":[20],"type":["chr"],"align":["left"]},{"label":["status"],"name":[21],"type":["int"],"align":["right"]},{"label":["Vgchartzscore"],"name":[22],"type":["dbl"],"align":["right"]},{"label":["img_url"],"name":[23],"type":["chr"],"align":["left"]}],"data":[{"1":"289","2":"God of War","3":"god-of-war","4":"Action","5":"M","6":"PS2","7":"Sony Computer Entertainment","8":"SCEA Santa Monica Studio","9":"NA","10":"9.3","11":"NA","12":"4.62","13":"NA","14":"NA","15":"NA","16":"NA","17":"NA","18":"2005","19":"","20":"http://www.vgchartz.com/game/869/god-of-war/?region=All","21":"1","22":"NA","23":"/games/boxart/full_5633331AmericaFrontccc.jpg"}],"options":{"columns":{"min":{},"max":[10],"total":[23]},"rows":{"min":[10],"max":[10],"total":[1]},"pages":{}}}
+  </script>
+</div>
+<!-- rnb-frame-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>However, with some further analysis, the dataset I used does not contain 2019 video game sales data, which was when God of War was released, so let’s see one of my favorite games:</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubWV0YWNyaXRpY19nYW1lcyAlPiUgZmlsdGVyKGdhbWUgPT0gXCJUaGUgRWxkZXIgU2Nyb2xscyBWOiBTa3lyaW1cIilcbmBgYCJ9 -->
+<pre class="r"><code>metacritic_games %&gt;% filter(game == &quot;The Elder Scrolls V: Skyrim&quot;)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbImRhdGEuZnJhbWUiXSwibnJvdyI6MiwibmNvbCI6MTV9LCJyZGYiOiJINHNJQUFBQUFBQUFCbzFTUzJ2YlFCQmVLWlpiaWNZeWhKNTYyWE9KVGVSU0FqMzBrRFNVSHBJYU81U2NhamJTUkJaWjc0clZ5b2wvWC85WDB0RmpaVW1ZMHNNd005ODhkdWFiWFh5NysrVGRlWVNRSXpJZ05qbHkwQ1REeTNrdyt6d2paR0NqWjJIRUxmUXpacDJnNGFPTVVldzY4T0YyRGZTS1I2RG9NbFNTODR6KytrS1hqenVWYlA0bnBkdk5ubC9XMW5ENWxPaHczWXUvdndDOWhpeGk5RHZiQUYzcVBFcGtWZ2MvSGd5ZTBoOUtDb1E0ZTk0MUZkMjI3eGFTdzJUTzJTNFI4VUdzTjhhTnBEOEZUd1RRNjV6ckpNVXNVUDhPZGp0WTEzdWpOOHVOM05MZzdKVE96b0tnZzUyWDJEbjZ4MlUrSVJUbGE4c241Y1c2UHRuN3d6bnFZTzliRjZpZGx2OEh0ZHVxLzQxeTIvSVhsWFIraGlPUWJFT29YNE9ER01IYWZvc0U2QWVwekhkd0k5Z0NsMmxEbUJPRFVDWjdKUExOUGFoVnhabzU3VkF4M1RxTkFnNHNnMVhFdEtrYnB6SkxkTEtGVmFoUWg2YlNGNUJyeFhnUEhndUkyWUgwVWRNbXovYlBINXNtYlhEVXRHaWo3Z1kweTBMWkxPUVYwVldGZEpsemxYeWFHdllNeFZhbHV4U0huR1dHWWdONnVEeWJQcWlDYUVKZWVpVnZaS29US2JESVBxbVAzQzYyVkEvd2MxRk1FazNDZFM0ZUo3UGlnWG9hODRIcXlScmJyNTYwWCt0V2pya1ZpQmcvdjVtZHMzdmdoakxjdUZ4NG1xcEVhTE1Kb3RsVVM4MU1uaGRLYnBCeU4vTHlGeHdjK2RldEJBQUEifQ== -->
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["game"],"name":[1],"type":["chr"],"align":["left"]},{"label":["platform"],"name":[2],"type":["chr"],"align":["left"]},{"label":["developer"],"name":[3],"type":["chr"],"align":["left"]},{"label":["genre"],"name":[4],"type":["chr"],"align":["left"]},{"label":["number_players"],"name":[5],"type":["chr"],"align":["left"]},{"label":["rating"],"name":[6],"type":["chr"],"align":["left"]},{"label":["release_date"],"name":[7],"type":["chr"],"align":["left"]},{"label":["positive_critics"],"name":[8],"type":["int"],"align":["right"]},{"label":["neutral_critics"],"name":[9],"type":["int"],"align":["right"]},{"label":["negative_critics"],"name":[10],"type":["int"],"align":["right"]},{"label":["positive_users"],"name":[11],"type":["int"],"align":["right"]},{"label":["neutral_users"],"name":[12],"type":["int"],"align":["right"]},{"label":["negative_users"],"name":[13],"type":["int"],"align":["right"]},{"label":["metascore"],"name":[14],"type":["int"],"align":["right"]},{"label":["user_score"],"name":[15],"type":["int"],"align":["right"]}],"data":[{"1":"The Elder Scrolls V: Skyrim","2":"PC","3":"Bethesda Game Studios","4":"Role-Playing","5":"No Online Multiplayer","6":"M","7":"Nov 10, 2011","8":"32","9":"0","10":"0","11":"1616","12":"322","13":"451","14":"94","15":"82"},{"1":"The Elder Scrolls V: Skyrim","2":"Switch","3":"Bethesda Game Studios, Iron Galaxy Studios","4":"Role-Playing","5":"No Online Multiplayer","6":"M","7":"Nov 17, 2017","8":"62","9":"1","10":"0","11":"49","12":"5","13":"9","14":"84","15":"82"}],"options":{"columns":{"min":{},"max":[10],"total":[15]},"rows":{"min":[10],"max":[10],"total":[2]},"pages":{}}}
+  </script>
+</div>
+<!-- rnb-frame-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudmdzYWxlcyAlPiUgZmlsdGVyKE5hbWUgPT0gXCJUaGUgRWxkZXIgU2Nyb2xscyBWOiBTa3lyaW1cIilcbmBgYCJ9 -->
+<pre class="r"><code>vgsales %&gt;% filter(Name == &quot;The Elder Scrolls V: Skyrim&quot;)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbImRhdGEuZnJhbWUiXSwibnJvdyI6MywibmNvbCI6MTF9LCJyZGYiOiJINHNJQUFBQUFBQUFCcTFUVFcvVE1CaCtsNC9TcHZ0QVcwOGdqZkFEV3EzdFlOS2tLUmxqcW9UUUNBMmdja0p1NjY1UlBidHlVbzJ4QTF6NEVYRGx2dlAySDRiRWpmTWticnNnZnNEQVR1eUpSRUpDaUZkeS9QaDlIei9PODhicFB1eTFuWjREQUNaWVlJQnBDd2lsbmFEWnV0Y0NzQXl4bWhPVmlweGZDOWFLQUZVeEZ0SXRBSS9GZUN0cUcySytxV1FrK2Zhek1YWjN5UkJ6Tnh4d1JranN2dGgwdzhrUmp3NytFeVYvb05WcjMxOVQyQXpDdG9KR3NGTWt0dGFhelQvaVBIZSt5d2l1QndRZFJYVC9yM041amVVSE9CbmplSWpja0kyU1E4WW44VDlWQUJhbHFsOWJQWDE2K2Y2T2I0M1M4SDVrODNXOWRORTVxYjI1OEczNTdKejRJT21ycDdydW5YMlE4ZEg3QXNYSTZwZnROTHp2NXpJK2U5K2tTdTM0V3YrdTByMjFOZjMwMWRueWw1d1VGQzZMVGRFQmpsVXJxcnJGWFVRbkd1OEpnc0psMGJsa3hMais3TlpMakxnVzZtREtOYkVTelBva2lzZFlWOHQ3MjY5Q1JMQnVYSG4zZVg3OUtNaXRxMDlFWDNrdU5kOGhySStJeXVWZFZEZzdiR2duOHNvYjc3SldtVVc3QTRKaWJWY25uU0ZLVUdQRXBWR0FxOEtXRzJ5YVJJeUtUWWI4cWV6QzVqbGVTQ3pOcUh5VFlYMHdudEZKZlYwZWtKYXpXRkRZL0ExWHN5T05uMHJLVmxJbFRQY2pxcHRxRTlUSFJDMFdoZVBVY0dQS0k1cG9KeUliTnhLV0lNMXpCb3pvVE9vTnJuNEJqVmhZbUV3RUFBQT0ifQ== -->
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["Rank"],"name":[1],"type":["int"],"align":["right"]},{"label":["Name"],"name":[2],"type":["chr"],"align":["left"]},{"label":["Platform"],"name":[3],"type":["chr"],"align":["left"]},{"label":["Year"],"name":[4],"type":["chr"],"align":["left"]},{"label":["Genre"],"name":[5],"type":["chr"],"align":["left"]},{"label":["Publisher"],"name":[6],"type":["chr"],"align":["left"]},{"label":["NA_Sales"],"name":[7],"type":["dbl"],"align":["right"]},{"label":["EU_Sales"],"name":[8],"type":["dbl"],"align":["right"]},{"label":["JP_Sales"],"name":[9],"type":["dbl"],"align":["right"]},{"label":["Other_Sales"],"name":[10],"type":["dbl"],"align":["right"]},{"label":["Global_Sales"],"name":[11],"type":["dbl"],"align":["right"]}],"data":[{"1":"76","2":"The Elder Scrolls V: Skyrim","3":"X360","4":"2011","5":"Role-Playing","6":"Bethesda Softworks","7":"5.03","8":"2.86","9":"0.10","10":"0.85","11":"8.84"},{"1":"127","2":"The Elder Scrolls V: Skyrim","3":"PS3","4":"2011","5":"Role-Playing","6":"Bethesda Softworks","7":"2.55","8":"2.71","9":"0.25","10":"1.05","11":"6.56"},{"1":"311","2":"The Elder Scrolls V: Skyrim","3":"PC","4":"2011","5":"Role-Playing","6":"Bethesda Softworks","7":"1.15","8":"2.09","9":"0.00","10":"0.64","11":"3.88"}],"options":{"columns":{"min":{},"max":[10],"total":[11]},"rows":{"min":[10],"max":[10],"total":[3]},"pages":{}}}
+  </script>
+</div>
+<!-- rnb-frame-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>As you can see, The Elder Scrolls V: Skyrim has been released 5 times (which is so annoying), and has lots of different sales data for different platforms. However, you can see it sells very well and has very good critic scores.</p>
 <!-- rnb-text-end -->
 
-<div id="rmd-source-code">LS0tDQp0aXRsZTogIkZpbmFsIFByb2plY3QgUHJlbGltaW5hcnkgRURBIg0KbmFtZTogIlNhcmFoIFBldHJvIg0KZGF0ZTogIk5vdmVtYmVyIDE1IDIwMjAiDQpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sNCg0KLS0tDQoNCiMjUmVzZWFyY2ggUXVlc3Rpb246IA0KV2hhdCB2aWRlbyBnYW1lcyB3ZXJlIHRoZSBtb3N0IHBvcHVsYXIgaW4gMjAxOT8gVGhpcyB3aWxsIGJlIGJhc2VkIG9uIHNhbGUgbnVtYmVycyBhbmQgSSBhbHNvIHBsYW4gdG8gYnJlYWsgdGhlIHBvcHVsYXJpdHkgZG93biBieSBnZW5yZSBhbmQgc2FsZXMgaW4gRXVyb3BlIGFuZCB0aGUgVVMuIEZpbmFsbHksIEkgd2lsbCB1c2UgY3JpdGljIGFuZCB1c2VyIHNjb3JlcyB0byBzZWUgd2hpY2ggcG9wdWxhciBnYW1lcyBieSBzYWxlcyB3ZXJlIHJhdGVkIHRoZSBoaWdoZXN0IGFuZCBsb3dlc3QuDQoNCkkgZm91bmQgdGhlIGRhdGEgc2V0cyBvbiBLYWdnbGUgYW5kIGRvd25sb2FkZWQgdGhlIC5jc3YgZmlsZXMgZnJvbSB0aGUgS2FnZ2xlIHdlYnNpdGUuDQoNCg0KIyNWaWRlbyBHYW1lIFNhbGVzIDIwMTkNClRoZSBmaXJzdCBkYXRhIHNldCBJIHVzZWQgaXMgVmlkZW8gR2FtZSBTYWxlcyAyMDE5IGZyb20gS2FnZ2xlLiBJdCB3YXMgZ2F0aGVyZWQgYnkgQWJkdWxzaGFoZWVkIEFscXVuYmVyIHdobyBpcyBhIHN0dWRlbnQgYXQgQm9zdG9uIFVuaXZlcnNpdHkgYW5kIGNhbiBiZSBmb3VuZCBhdDogaHR0cHM6Ly93d3cua2FnZ2xlLmNvbS9hc2hhaGVlZHEvdmlkZW8tZ2FtZXMtc2FsZXMtMjAxOS4gSGUgdXNlZCB0aGlzIGRhdGEgc2V0IHRvIGNvbnRpbnVlIHRoZSBjb2xsZWN0aW9uIG9mIGRhdGEgZnJvbSB0aGUgc2Vjb25kIGRhdGFzZXQgSSB1c2VkLCBWaWRlbyBHYW1lIFNhbGVzLiBTaW5jZSB0aGUgZGF0YXNldHMgYXJlIHZlcnkgc2ltaWxhciwgSSBwbGFuIHRvIHVzZSB0aGUgYWRkZWQgYmVuZWZpdCBvZiBsb29raW5nIHNwZWNpZmljYWxseSBhdCAyMDE5IGRhdGEuIEhvd2V2ZXIsIHRoaXMgZGF0YXNldCBhbHNvIGluY2x1ZGVzIGNyaXRpYyBhbmQgdXNlciBzY29yZXMgd2hpY2ggSSBwbGFuIHRvIHVzZSBpbiBteSBleHBsb3JhdGlvbi4NCkJlbG93LCB5b3UgY2FuIHNlZSBhIHNuaXBwZXQgb2YgdGhlIGRhdGEgYWxvbmcgd2l0aCBzb21lIHN1bW1hcnkgc3RhdGlzdGljcy4gDQpgYGB7cn0NCmhlYWQodmdzYWxlcy4xMi40LjIwMTkpDQpgYGANCmBgYHtyfQ0Kc3VtbWFyeSh2Z3NhbGVzLjEyLjQuMjAxOSkNCmBgYA0KVGhpcyBkYXRhc2V0IHdhcyBvcmlnaW5hbGx5IGNvbGxlY3RlZCBhcyBhIGNvbnRpbnVhdGlvbiB3b3JrIG9mIHRoZSBzZWNvbmQgZGF0YXNldCBJIHVzZWQsIFZpZGVvIEdhbWUgU2FsZXMuIEhlIGV4cGxhaW5zIHRoYXQgaGUgc2NyYXBlZCB0aGUgZGF0YSB1c2luZyBhIHNjcmlwdCBhbmQgY29sbGVjdGVkIGl0IGludG8gYSAuY3N2IGZpbGUuDQoNCkEgY2FzZSBpbiB0aGlzIGRhdGFzZXQgZGVzY3JpYmVzIGEgdmlkZW8gZ2FtZSBhbmQgaXRzIHJlc3BlY3RpdmUgc2FsZXMgZGF0YSB0aGF0IGluY2x1ZGVzIHRoZSB5ZWFyIDIwMTksIHdoaWNoIHRoZSBmaXJzdCBkYXRhc2V0IGRvZXMgbm90IGluY2x1ZGUuIEVhY2ggdmlkZW8gZ2FtZSBpcyBpdHMgb3duIHNlcGFyYXRlIGNhc2UuDQoNCkkgcGxhbiB0byB1c2UgdGhlIE5hbWUsIEdlbnJlLCBDcml0aWNfU2NvcmUsIGFuZCBVc2VyX1Njb3JlIGZyb20gdGhpcyBkYXRhc2V0IHRvIGV4cGxvcmUgdGhlIG1vc3QgcG9wdWxhciB0aXRsZXMgb2YgMjAxOS4NCg0KYGBge3J9DQpucm93KHZnc2FsZXMuMTIuNC4yMDE5KQ0KYGBgDQpUaGUgZGF0YXNldCBoYXMgYSBsb3Qgb2Ygcm93cyBmb3IgZXhwbG9yYXRpb24gYXQgNTUsNzkyIHJvd3MgaW4gdG90YWwuDQoNCg0KIyNWaWRlbyBHYW1lIFNhbGVzDQpUaGUgc2Vjb25kIGRhdGFzZXQgSSA=</div>
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIkZpbmFsIFByb2plY3QgUHJlbGltaW5hcnkgRURBIg0KbmFtZTogIlNhcmFoIFBldHJvIg0KZGF0ZTogIk5vdmVtYmVyIDE1IDIwMjAiDQpvdXRwdXQ6IA0KICBodG1sX25vdGVib29rOiANCiAgICBmaWdfd2lkdGg6IDIwDQogICAgZmlnX2hlaWdodDogMjANCi0tLQ0KYGBge3J9DQojI2xvYWQgcGFja2FnZXMNCmxpYnJhcnkobW9zYWljKQ0KbGlicmFyeSh0aWR5dmVyc2UpDQpsaWJyYXJ5KGRwbHlyKQ0KbGlicmFyeShnZ3Bsb3QyKQ0KYGBgDQoNCg0KIyNSZXNlYXJjaCBRdWVzdGlvbjogDQpXaGF0IHZpZGVvIGdhbWVzIGFyZSB0aGUgbW9zdCBwb3B1bGFyIGJhc2VkIG9uIGNyaXRpYyByZXZpZXdzPyBUaGlzIHdpbGwgYmUgYmFzZWQgb24gc2FsZSBudW1iZXJzIGFuZCBJIGFsc28gcGxhbiB0byBicmVhayB0aGUgcG9wdWxhcml0eSBkb3duIGJ5IGZpZ3VyaW5nIG91dCB3aGljaCBnYW1lcyBoYXZlIHRoZSBtb3N0IHBvcHVsYXIgY3JpdGljIHNjb3JlIGFuZCBjcm9zcyByZWZlcmVuY2luZyB0aGF0IHdpdGggc2FsZXMgZGF0YSB0byBzZWUgaWYgaGlnaCBjcml0aWMgc2NvcmUgY29ycmVsYXRlcyB3aXRoIGJldHRlciBzYWxlcy4NCg0KSSBmb3VuZCB0aGUgZGF0YSBzZXRzIG9uIEthZ2dsZSBhbmQgZG93bmxvYWRlZCB0aGUgLmNzdiBmaWxlcyBmcm9tIHRoZSBLYWdnbGUgd2Vic2l0ZS4NCg0KDQojI01ldGEgQ3JpdGljIEdhbWVzDQpUaGUgZmlyc3QgZGF0YSBzZXQgSSB1c2VkIGlzIFZpZGVvIEdhbWUgU2FsZXMgMjAxOSBmcm9tIEthZ2dsZS4gSXQgd2FzIGdhdGhlcmVkIGJ5IEFuZHJlYSBDYWRlZGR1IHdobyBpcyBhIHVzZXIgYXQgb24gS2FnZ2xlIGFuZCBjYW4gYmUgZm91bmQgYXQ6IGh0dHBzOi8vd3d3LmthZ2dsZS5jb20vc2thdGVkZHUvbWV0YWNyaXRpYy1nYW1lcy1zdGF0cy0yMDExMjAxOS4gU2hlIGdhdGhlcmVkIHRoaXMgZGF0YSBjb250YWluaW5nIG1ldGEgY3JpdGljIHNjb3JlcyBmb3IgdmlkZW8gZ2FtZXMuIFRoZSBkYXRhIHNldCB3YXMgbGFzdCB1cGRhdGVkIGluIDIwMTksIHNvIGl0IGhhcyBjdXJyZW50IGdhbWUgZGF0YSBpbmNsdWRlZCB0byBnbyBhbG9uZyB3aXRoIHRoZSBzYWxlcyBkYXRhIGluIHRoZSBWaWRlbyBHYW1lIFNhbGVzIGRhdGFzZXQuDQpCZWxvdywgeW91IGNhbiBzZWUgYSBzbmlwcGV0IG9mIHRoZSBkYXRhIGFsb25nIHdpdGggc29tZSBzdW1tYXJ5IHN0YXRpc3RpY3MuIA0KYGBge3J9DQpoZWFkKG1ldGFjcml0aWNfZ2FtZXMpDQpgYGANCmBgYHtyfQ0Kc3VtbWFyeShtZXRhY3JpdGljX2dhbWVzKQ0KYGBgDQpUaGlzIGRhdGEgc2V0IGRvZXMgbm90IGhhdmUgbXVjaCBpbmZvcm1hdGlvbiBvbiBob3cgaXQgd2FzIGNvbGxlY3RlZCBhbmQgbWFpbnRhaW5lZCwgaG93ZXZlciBpdCBjYW4gYmUgYXNzdW1lZCBzaGUgc2NyYXBlZCB0aGUgZGF0YSBmcm9tIGEgbWV0YSBjcml0aWMgc2NvcmUgd2Vic2l0ZS4NCg0KQSBjYXNlIGluIHRoaXMgZGF0YXNldCBkZXNjcmliZXMgYSB2aWRlbyBnYW1lIGFuZCBpdHMgcmVzcGVjdGl2ZSBjcml0aWMgYW5kIHVzZXIgc2NvcmUsIHdoZXRoZXIgcG9zaXRpdmUsIG5ldXRyYWwsIG9yIG5lZ2F0aXZlLiBJdCBhbHNvIGluY2x1ZGVzIHRoZSBwbGF0Zm9ybSwgZ2VucmUsIGFuZCByYXRpbmcuDQoNCkkgcGxhbiB0byB1c2UgdGhlIGdhbWUsIHBsYXRmb3JtLCBnZW5yZSwgcG9zaXRpdmVfY3JpdGljcywgYW5kIG5lZ2F0aXZlX2NyaXRpY3MgaW4gY29uanVuY3Rpb24gd2l0aCB0aGUgb3RoZXIgZGF0YXNldCB0byBjb25jbHVkZSBwb3B1bGFyIHZpZGVvIGdhbWVzIGFuZCB0aGVpciByYXRpbmdzLg0KDQpgYGB7cn0NCm5yb3cobWV0YWNyaXRpY19nYW1lcykNCmBgYA0KVGhlIGRhdGFzZXQgaGFzIGEgbG90IG9mIHJvd3MgZm9yIGV4cGxvcmF0aW9uIGF0IDUsNjk5IHJvd3MgaW4gdG90YWwuDQoNCg0KIyNWaWRlbyBHYW1lIFNhbGVzDQpUaGUgc2Vjb25kIGRhdGFzZXQgSSBjaG9zZSBpcyB0aGUgVmlkZW8gR2FtZSBTYWxlcyBkYXRhIHNldC4gVGhpcyBkYXRhc2V0IHdhcyBjb2xsZWN0ZWQgYnkgR3JlZ29yeSBTbWl0aCB3aG8gaXMgYSBkYXRhIGVuZ2luZWVyIGF0IFBldHpsIEFtZXJpY2EuIFRoaXMgaXMgdGhlIHNlY29uZCB2ZXJzaW9uIG9mIHRoZSBkYXRhIGFuZCBoYXMgbm90IGJlZW4gdXBkYXRlZCBmb3IgNCB5ZWFycy4gSXQgY2FuIGJlIGZvdW5kIGF0OiBodHRwczovL3d3dy5rYWdnbGUuY29tL2dyZWdvcnV0L3ZpZGVvZ2FtZXNhbGVzLg0KSSBwbGFuIHRvIHVzZSB0aGlzIGRhdGFzZXQgYXMgYSBzdXBwbGVtZW50YXJ5IGRhdGEgc291cmNlIGZvciB0aGUgbWV0YSBjcml0aWMgZ2FtZXMgZGF0YXNldCBieSB1c2luZyBpdCB0byBhbmFseXplIGhvdyB3ZWxsIHJhdGVkIGdhbWVzIHNvbGQgaW4gYm90aCB0aGUgTm9ydGggQW1lcmljYW4gYW5kIEdsb2JhbCBNYXJrZXRzLg0KQmVsb3csIHlvdSBjYW4gc2VlIGEgc25pcHBldCBvZiB0aGUgZGF0YSBhbmQgdGhlIGNvbHVtbnMgaW5jbHVkZWQgaW4gdGhlIGRhdGEgc2V0Lg0KYGBge3J9DQpoZWFkKHZnc2FsZXMpDQpgYGANCmBgYHtyfQ0Kc3VtbWFyeSh2Z3NhbGVzKQ0KYGBgDQpUaGlzIGRhdGFzZXQgd2FzIGFsc28gYXZhaWxhYmxlIGluIGEgLmNzdiBmb3JtYXQgZnJvbSBLYWdnbGUgd2hpY2ggSSB3YXMgYWJsZSB0byBkb3dubG9hZCBhbmQgaW1wb3J0IGludG8gUlN0dWRpby4NCg0KQSBjYXNlIGluIHRoaXMgZGF0YXNldCBpcyB0aGUgc2FtZSBhcyB0aGUgbGFzdCB3aGVyZSBvbmUgY2FzZSByZXByZXNlbnRzIHZpZGVvIGdhbWUgc2FsZXMgZm9yIGEgcGFydGljdWxhciB2aWRlbyBnYW1lIGluIHRoZSB5ZWFyIGl0IHdhcyByZWxlYXNlZC4NCg0KSSBwbGFuIHRvIHVzZSB0aGUgTmFtZSwgUGxhdGZvcm0sIEdlbnJlLCBZZWFyLCBhbmQgTkFfU2FsZXMgY29sdW1ucyBpbiBteSBkYXRhIGV4cGxvcmF0aW9uLiBJIHBsYW4gdG8gdXNlIHRoZXNlIGluIGNvbmp1bmN0aW9uIHdpdGggdGhlIE1ldGEgQ3JpdGljIEdhbWVzIGRhdGEgc2V0IGNvbHVtbnMuDQoNCmBgYHtyfQ0KbnJvdyh2Z3NhbGVzKQ0KYGBgDQpBZ2FpbiwgdGhlcmUgYXJlIHBsZW50eSBvZiBjb2x1bW5zIGZvciB1c2UgaW4gdGhpcyBkYXRhc2V0IHdpdGggMTYsNTk4Lg0KDQojI0luZm9ybWF0aXZlIFBsb3RzDQpXaXRoIHRoZSBzdW1tYXJ5IHN0YXRpc3RpY3MgYWJvdmUsIEkgYW0gcGxhbm5pbmcgdG8gZ2F1Z2UgcG9wdWxhcml0eSBmb3IgdGhlIG1vc3QgcG9wdWxhciB2aWRlbyBnYW1lcyBieSB1c2luZyBib3RoIGNyaXRpYyBzY29yZSBhbmQgc2FsZXMuDQoNCg0KDQpgYGB7cn0NCmhpZ2hlc3RfcmFuayA8LSB3aGljaC5tYXgobWV0YWNyaXRpY19nYW1lcyRwb3NpdGl2ZV9jcml0aWNzKQ0KaGlnaGVzdF9yYW5rDQpgYGANCmBgYHtyfQ0KcG9zIDwtIG1ldGFjcml0aWNfZ2FtZXMgJT4lIGZpbHRlcihwb3NpdGl2ZV9jcml0aWNzID4gMTAwKQ0KcG9zDQpgYGANCkJ5IGZpbHRlcmluZyBmb3IgZ2FtZXMgdGhhdCB3ZXJlIGhhZCBtb3JlIHRoYW4gMTAwIHBvc2l0aXYgY3JpdGljIHNjb3JlcywgeW91IGFyZSBsZWZ0IHdpdGggdGhlIDYgbW9zdCBwb3B1bGFyIGdhbWVzIHJhdGVkIGJ5IGNyaXRpY3MuDQoNCmBgYHtyfQ0KcG9zICU+JSBnZ3Bsb3QoYWVzKHggPSBnYW1lLHk9cG9zaXRpdmVfY3JpdGljcykpICsgZ2VvbV9wb2ludChhZXMoY29sb3I9Z2FtZSkpICsgdGhlbWUoYXhpcy50ZXh0LnggPSBlbGVtZW50X3RleHQoYW5nbGUgPSA2MCwgdmp1c3QgPSAxLCBoanVzdD0xKSkNCmBgYA0KQWx0aG91Z2ggdGhpcyBncmFwaCBpcyBhIGJpdCBjcm93ZGVkIGluIFJzdHVkaW8sIHNlZWluZyBpdCBhcyBhIGZ1bGwgZ3JhcGggeW91IGNhbiBzZWUgYSB2aXN1YWxpemF0aW9uIG9mIHRoZSA2IG1vc3QgcG9wdWxhciBnYW1lcyBhY2NvcmRpbmcgdG8gY3JpdGljcywgd2l0aCBHb2Qgb2YgV2FyIGJlaW5nIHRoZSBtb3N0IHBvcHVsYXIuDQoNCldpdGggdGhpcyBpbmZvcm1hdGlvbiwgd2UgY2FuIHNlZSBob3cgd2VsbCBHb2Qgb2YgV2FyIGRpZCBpbiBzYWxlczoNCmBgYHtyfQ0KdmdzYWxlcy4xMi40LjIwMTkgJT4lIGZpbHRlcihOYW1lID09ICJHb2Qgb2YgV2FyIikNCmBgYA0KSG93ZXZlciwgd2l0aCBzb21lIGZ1cnRoZXIgYW5hbHlzaXMsIHRoZSBkYXRhc2V0IEkgdXNlZCBkb2VzIG5vdCBjb250YWluIDIwMTkgdmlkZW8gZ2FtZSBzYWxlcyBkYXRhLCB3aGljaCB3YXMgd2hlbiBHb2Qgb2YgV2FyIHdhcyByZWxlYXNlZCwgc28gbGV0J3Mgc2VlIG9uZSBvZiBteSBmYXZvcml0ZSBnYW1lczoNCg0KYGBge3J9DQptZXRhY3JpdGljX2dhbWVzICU+JSBmaWx0ZXIoZ2FtZSA9PSAiVGhlIEVsZGVyIFNjcm9sbHMgVjogU2t5cmltIikNCmBgYA0KYGBge3J9DQp2Z3NhbGVzICU+JSBmaWx0ZXIoTmFtZSA9PSAiVGhlIEVsZGVyIFNjcm9sbHMgVjogU2t5cmltIikNCmBgYA0KDQpBcyB5b3UgY2FuIHNlZSwgVGhlIEVsZGVyIFNjcm9sbHMgVjogU2t5cmltIGhhcyBiZWVuIHJlbGVhc2VkIDUgdGltZXMgKHdoaWNoIGlzIHNvIGFubm95aW5nKSwgYW5kIGhhcyBsb3RzIG9mIGRpZmZlcmVudCBzYWxlcyBkYXRhIGZvciBkaWZmZXJlbnQgcGxhdGZvcm1zLiBIb3dldmVyLCB5b3UgY2FuIHNlZSBpdCBzZWxscyB2ZXJ5IHdlbGwgYW5kIGhhcyB2ZXJ5IGdvb2QgY3JpdGljIHNjb3Jlcy4NCg0K</div>
 
 
 
