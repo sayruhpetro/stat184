@@ -8,6 +8,10 @@ output:
     fig_height: 10
 ---
 ```{r}
+#clean workspace
+rm(list = ls())
+```
+```{r}
 ##load packages
 library(mosaic)
 library(tidyverse)
@@ -15,6 +19,12 @@ library(dplyr)
 library(ggplot2)
 ```
 
+
+```{r}
+## load data
+metacritic_games <- read.csv("C:/Users/Sarah Petro/OneDrive - The Pennsylvania State University/FinalProject_Stat184/metacritic_games.csv")
+vgsales <- read.csv("C:/Users/Sarah Petro/OneDrive - The Pennsylvania State University/FinalProject_Stat184/videogamesales/vgsales.csv")
+```
 
 ### Research Question: 
 
@@ -100,9 +110,37 @@ However, with some further analysis, the dataset I used does not contain 2019 vi
 ```{r}
 metacritic_games %>% filter(game == "The Elder Scrolls V: Skyrim")
 ```
+
+
 ```{r}
 vgsales %>% filter(Name == "The Elder Scrolls V: Skyrim")
 ```
 
 As you can see, The Elder Scrolls V: Skyrim has been released 5 times (which is so annoying), and has lots of different sales data for different platforms. However, you can see it sells very well and has very good critic scores.
+
+### More Exploratory Analysis
+<br>
+I also decided to join the tables along their name variable.
+
+First, I need to change the variable name in metacritic_games from "game" to "Name" to match the vgsales tables. Also, the games need to be matched by platform.
+```{r}
+metacritic_names <- metacritic_games %>% rename(Name = game, Platform = platform)
+```
+
+
+
+Then, to check the change, you can use colnames()
+
+```{r}
+colnames(metacritic_names)
+```
+
+Finally, the inner join can be completed.
+
+```{r}
+joined <- inner_join(vgsales, metacritic_names, by=c("Name", "Platform"))
+joined
+```
+
+
 
