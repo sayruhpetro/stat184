@@ -4,8 +4,8 @@ name: "Sarah Petro"
 date: "November 15 2020"
 output: 
   html_notebook: 
-    fig_width: 20
-    fig_height: 20
+    fig_width: 10
+    fig_height: 10
 ---
 ```{r}
 ##load packages
@@ -16,14 +16,18 @@ library(ggplot2)
 ```
 
 
-##Research Question: 
+### Research Question: 
+
 What video games are the most popular based on critic reviews? This will be based on sale numbers and I also plan to break the popularity down by figuring out which games have the most popular critic score and cross referencing that with sales data to see if high critic score correlates with better sales.
 
 I found the data sets on Kaggle and downloaded the .csv files from the Kaggle website.
 
 
-##Meta Critic Games
+### Meta Critic Games
 The first data set I used is Video Game Sales 2019 from Kaggle. It was gathered by Andrea Cadeddu who is a user at on Kaggle and can be found at: https://www.kaggle.com/skateddu/metacritic-games-stats-20112019. She gathered this data containing meta critic scores for video games. The data set was last updated in 2019, so it has current game data included to go along with the sales data in the Video Game Sales dataset.
+
+<br>
+
 Below, you can see a snippet of the data along with some summary statistics. 
 ```{r}
 head(metacritic_games)
@@ -42,8 +46,9 @@ nrow(metacritic_games)
 ```
 The dataset has a lot of rows for exploration at 5,699 rows in total.
 
+<br>
 
-##Video Game Sales
+### Video Game Sales
 The second dataset I chose is the Video Game Sales data set. This dataset was collected by Gregory Smith who is a data engineer at Petzl America. This is the second version of the data and has not been updated for 4 years. It can be found at: https://www.kaggle.com/gregorut/videogamesales.
 I plan to use this dataset as a supplementary data source for the meta critic games dataset by using it to analyze how well rated games sold in both the North American and Global Markets.
 Below, you can see a snippet of the data and the columns included in the data set.
@@ -64,7 +69,9 @@ nrow(vgsales)
 ```
 Again, there are plenty of columns for use in this dataset with 16,598.
 
-##Informative Plots
+<br> 
+
+### Informative Plots
 With the summary statistics above, I am planning to gauge popularity for the most popular video games by using both critic score and sales.
 
 
@@ -79,7 +86,7 @@ pos
 ```
 By filtering for games that were had more than 100 positiv critic scores, you are left with the 6 most popular games rated by critics.
 
-```{r}
+```{r, fig.width=5, fig.height=5}
 pos %>% ggplot(aes(x = game,y=positive_critics)) + geom_point(aes(color=game)) + theme(axis.text.x = element_text(angle = 60, vjust = 1, hjust=1))
 ```
 Although this graph is a bit crowded in Rstudio, seeing it as a full graph you can see a visualization of the 6 most popular games according to critics, with God of War being the most popular.
