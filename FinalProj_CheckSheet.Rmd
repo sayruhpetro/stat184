@@ -29,13 +29,13 @@ Lines 43, 46, 55, 66, 69, 78.
 
 
 (A) .Rmd Line number(s) for general data wrangling: 
-94, 106, 111, 116
+94, 106, 111, 116, 
 
 (B) .Rmd Line number(s) for a join operation: 
 141-142
 
 (C) .Rmd Line number(s) for a spread or gather operation (or equivalent):
-
+173
 
 (D) .Rmd Line number(s) for use of regular expressions: 
 
@@ -44,7 +44,7 @@ Lines 43, 46, 55, 66, 69, 78.
 90-91
 
 (F) .Rmd Line number(s) for use of user-defined functions: 
-
+149-151
 
 (G) .Rmd Line number(s) for use of loops and/or control flow: 
 

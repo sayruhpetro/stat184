@@ -18,6 +18,13 @@ library(tidyverse)
 library(dplyr)
 library(ggplot2)
 ```
+```{r}
+install.packages("multcomp")
+library(multcomp)
+install.packages("party")
+library(party)
+```
+
 
 
 ```{r}
@@ -97,9 +104,10 @@ pos
 By filtering for games that were had more than 100 positiv critic scores, you are left with the 6 most popular games rated by critics.
 
 ```{r, fig.width=5, fig.height=5}
-pos %>% ggplot(aes(x = game,y=positive_critics)) + geom_point(aes(color=game)) + theme(axis.text.x = element_text(angle = 60, vjust = 1, hjust=1))
+pos %>% ggplot(aes(x = game,y=positive_critics)) + geom_point(aes(color=game)) +
+  theme(axis.text.x = element_text(angle = 60, vjust = 1, hjust=1))
 ```
-Although this graph is a bit crowded in Rstudio, seeing it as a full graph you can see a visualization of the 6 most popular games according to critics, with God of War being the most popular.
+This graph is useful because it seems as if most games that sell well also have a high positive critic score, however you can see that even though Legend of Zelda: Breath of the Wild is of the top 5, it had much lower scores than the other top 5 games. I plan to explore this a bit more in my later graphs.
 
 With this information, we can see how well God of War did in sales:
 ```{r}
@@ -141,6 +149,33 @@ Finally, the inner join can be completed.
 joined <- inner_join(vgsales, metacritic_names, by=c("Name", "Platform"))
 joined
 ```
+<br>
+I also decided to use create my own function for summing the sales for a particular game. The function takes the sales of the game and then automatically sums all of the sales to make it easier to calculate.
+
+```{r}
+summed <- function(NA_Sales, EU_Sales, JP_Sales, Other_Sales, Global_Sales) {
+  salesTotal <- NA_Sales+EU_Sales+JP_Sales+Other_Sales+Global_Sales
+  return (salesTotal)
+}
+```
+
+Then, a representation for how to use it. Here, I inputted sales data for Grand Theft Auto V. Although this is a simple function, the function will be useful for when I need to calculate the total sales for exploratory graphs later in the project.
+
+```{r}
+summed(3.80, 5.81, 0.36, 2.02, 11.98)
+```
+So, this outputs that the total sales for Grand Theft Auto V was 23.97 million copies.
+
+<br>
+
+Finally, as the last part of my exploratory analysis before I get into my graphs, I wanted to explore some of the Genre and NA_Sales data. Since I am exploring the relationship between popularity of the game and critic reviews, sales data can play an important part in that question. Using the spread function, I can examine the table to show how many sales happened for each genre.
+```{r}
+joined %>% spread(key = Genre, value = NA_Sales)
+```
+
+### Graphs of the Data
+
+Graphs are an important visualization tool for examining relationships between data. For my first graph,
 
 
 
