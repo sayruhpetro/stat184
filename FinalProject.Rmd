@@ -1,7 +1,7 @@
 ---
-title: "Final Project Preliminary EDA"
+title: "Final Project"
 name: "Sarah Petro"
-date: "November 15 2020"
+date: "December 13, 2020"
 output: 
   html_notebook: 
     fig_width: 10
@@ -45,41 +45,57 @@ The first data set I used is Video Game Sales 2019 from Kaggle. It was gathered 
 
 <br>
 
-Below, you can see a snippet of the data along with some summary statistics. 
+Below, you can see a snippet of the data along with some summary statistics.
+<br>
 ```{r}
 head(metacritic_games)
 ```
+<br>
+
 ```{r}
 summary(metacritic_games)
 ```
+
+<br>
 This data set does not have much information on how it was collected and maintained, however it can be assumed she scraped the data from a meta critic score website.
-
+<br>
 A case in this dataset describes a video game and its respective critic and user score, whether positive, neutral, or negative. It also includes the platform, genre, and rating.
-
+<br>
 I plan to use the game, platform, genre, positive_critics, and negative_critics in conjunction with the other dataset to conclude popular video games and their ratings.
+<br>
 
 ```{r}
 nrow(metacritic_games)
 ```
+<br>
+
 The dataset has a lot of rows for exploration at 5,699 rows in total.
 
 <br>
 
 ### Video Game Sales
+<br>
 The second dataset I chose is the Video Game Sales data set. This dataset was collected by Gregory Smith who is a data engineer at Petzl America. This is the second version of the data and has not been updated for 4 years. It can be found at: https://www.kaggle.com/gregorut/videogamesales.
 I plan to use this dataset as a supplementary data source for the meta critic games dataset by using it to analyze how well rated games sold in both the North American and Global Markets.
 Below, you can see a snippet of the data and the columns included in the data set.
+
+<br>
 ```{r}
 head(vgsales)
 ```
+<br>
+
 ```{r}
 summary(vgsales)
 ```
+<br>
 This dataset was also available in a .csv format from Kaggle which I was able to download and import into RStudio.
-
+<br>
 A case in this dataset is the same as the last where one case represents video game sales for a particular video game in the year it was released.
-
+<br>
 I plan to use the Name, Platform, Genre, Year, and NA_Sales columns in my data exploration. I plan to use these in conjunction with the Meta Critic Games data set columns.
+<br>
+
 
 ```{r}
 nrow(vgsales)
@@ -91,59 +107,81 @@ Again, there are plenty of columns for use in this dataset with 16,598.
 ### Informative Plots
 With the summary statistics above, I am planning to gauge popularity for the most popular video games by using both critic score and sales.
 
-
+<br>
 
 ```{r}
 highest_rank <- which.max(metacritic_games$positive_critics)
 highest_rank
 ```
+<br>
+
 ```{r}
 pos <- metacritic_games %>% filter(positive_critics > 100)
 pos
 ```
+<br>
+
 By filtering for games that were had more than 100 positiv critic scores, you are left with the 6 most popular games rated by critics.
+<br>
 
 ```{r, fig.width=5, fig.height=5}
 pos %>% ggplot(aes(x = game,y=positive_critics)) + geom_point(aes(color=game)) +
   theme(axis.text.x = element_text(angle = 60, vjust = 1, hjust=1))
 ```
+<br>
 This graph is useful because it seems as if most games that sell well also have a high positive critic score, however you can see that even though Legend of Zelda: Breath of the Wild is of the top 5, it had much lower scores than the other top 5 games. I plan to explore this a bit more in my later graphs.
+<br>
 
 With this information, we can see how well God of War did in sales:
+<br>
 ```{r}
 vgsales.12.4.2019 %>% filter(Name == "God of War")
 ```
+<br>
+
 However, with some further analysis, the dataset I used does not contain 2019 video game sales data, which was when God of War was released, so let's see one of my favorite games:
+
+<br>
 
 ```{r}
 metacritic_games %>% filter(game == "The Elder Scrolls V: Skyrim")
 ```
+<br>
 
 
 ```{r}
 vgsales %>% filter(Name == "The Elder Scrolls V: Skyrim")
 ```
+<br>
+
 
 As you can see, The Elder Scrolls V: Skyrim has been released 5 times (which is so annoying), and has lots of different sales data for different platforms. However, you can see it sells very well and has very good critic scores.
+<br>
 
 ### More Exploratory Analysis
 <br>
 I also decided to join the tables along their name variable.
+<br>
 
 First, I need to change the variable name in metacritic_games from "game" to "Name" to match the vgsales tables. Also, the games need to be matched by platform.
+<br>
+
 ```{r}
 metacritic_names <- metacritic_games %>% rename(Name = game, Platform = platform)
+metacritic_names
 ```
 
-
+<br>
 
 Then, to check the change, you can use colnames()
 
 ```{r}
 colnames(metacritic_names)
 ```
+<br>
 
 Finally, the inner join can be completed.
+<br>
 
 ```{r}
 joined <- inner_join(vgsales, metacritic_names, by=c("Name", "Platform"))
@@ -151,6 +189,7 @@ joined
 ```
 <br>
 I also decided to use create my own function for summing the sales for a particular game. The function takes the sales of the game and then automatically sums all of the sales to make it easier to calculate.
+<br>
 
 ```{r}
 summed <- function(NA_Sales, EU_Sales, JP_Sales, Other_Sales, Global_Sales) {
@@ -159,59 +198,84 @@ summed <- function(NA_Sales, EU_Sales, JP_Sales, Other_Sales, Global_Sales) {
 }
 ```
 
+<br>
+
 Then, a representation for how to use it. Here, I inputted sales data for Grand Theft Auto V. Although this is a simple function, the function will be useful for when I need to calculate the total sales for exploratory graphs later in the project.
+<br>
 
 ```{r}
 summed(3.80, 5.81, 0.36, 2.02, 11.98)
 ```
+<br>
+
 So, this outputs that the total sales for Grand Theft Auto V was 23.97 million copies.
 
 <br>
 
 Finally, as the last part of my exploratory analysis before I get into my graphs, I wanted to explore some of the Genre and NA_Sales data. Since I am exploring the relationship between popularity of the game and critic reviews, sales data can play an important part in that question. Using the spread function, I can examine the table to show how many sales happened for each genre.
+
+<br>
+
 ```{r}
 joined %>% spread(key = Genre, value = NA_Sales)
 ```
+<br>
 
 ### Graphs of the Data
+<br>
 
 Graphs are an important visualization tool for examining relationships between data. For my first graph, I will be looking at the relationship between user score and meta score. As well I added color mapped to positive critics and size mapped to negative critics so that all of the scored information and their correlations can be viewed.
+<br>
+
 
 ```{r}
 joined %>% ggplot(aes(x=user_score, y=metascore)) + 
   geom_point(aes(color = positive_critics,stat = "identity", size = negative_critics))
 ```
+<br>
 
 Using this simple graph, you can see a clearly positive correlation between high metascore(critic and user score, with critic being weighted higher) and user score. I also added a color scheme to this graph to add the number of positive critics as a factor onto the graph. You can see that just because a game has a high metascore and user_score, that does not imply a high number of positive critics. This graph confirms my conclusion that if a game sells, then it happens to sell and that critics, positive users, and metascores have little to do with the success of a game and more on if the game sells then it sells. 
 As well, you can see an obvious correlation between low user score and lots of negative critics. Seeing as both of these correlations are positive, you can say with some confidence that the user score and number of positive or negative critics have some correlation. However you can also see lots of outliers in this graph as well.
 <br>
 
 Adding onto this graph, I decided to look at the cluster of points for high number of positive critics vs meta score along with an overlay of a smooth density line. I also used color to showcase user score as well to showcase the same amount of information of distribution of user score.
+<br>
+
 ```{r}
 joined %>% ggplot(aes(x=positive_critics, y=metascore)) + 
   geom_point(aes(color = user_score, stat = "identity")) + stat_smooth() 
 ```
 
+<br>
 
 In this graph, you can see the meta score vs number of positive critics. I added a smooth layer to the points so you can see the error margin around the smooth function. Again, a high number of critics vs a high meta score do seem to have some positive correlation, however there are enough outliers to prove that correlation does not equal causation in this case. In other words, just because a game has a high number of positive critics does not mean it has a high meta score and vice versa. With the color representing user score, you can compare the results to the above graph and see that there are lots of outliers considering user score, meta score, and number of positive critics.
+<br>
 
 Finally, I wanted to see density with histograms for a bit more information, so I used user score to shed some more light on the density of the how users score these games. I also added the mean to show the mean user score vs the density.
+<br>
+
 ```{r}
 joined %>% ggplot(aes(x=user_score)) + 
   geom_density() + geom_vline(aes(xintercept = mean(user_score)), linetype = 2)
 ```
 
+<br>
 
 Finally, I look to use sales data to see how the top 5 selling games are represented in user score.
 First, I need to filter to find the top selling games. For the sake of simplicity, I am only going to use Global Sales.
+<br>
+
 ```{r}
 highSelling <-  rank(-joined$Global_Sales)
 head(joined[order(joined$Rank),],5)
 ```
+<br>
 
 Now that we have the 5 top selling games from Global Sales, we can use this information to draw a few conclusions. 
+<br>
 
 ### Conclusion
+<br>
 
 Notice that the games in the top 5 highest selling list are completely different from the games with the highest number of positive critics that we found in the beginning of the report. Noting this, I conclude that my research question has an answer and that answer is: high critic scores and high user scores do not always indicate a high selling game. The highest rated games in this dataset are completely different from the games that are the highest selling in the dataset. Correlation does not equal causation, so more analysis would be needed, however for the purposes of this report and the research question asked, I can say, using my plots and code, that a game having high critic scores or high user scores does not mean it will sell well in the markets and vice versa. 
 

@@ -29,22 +29,22 @@ Lines 43, 46, 55, 66, 69, 78.
 
 
 (A) .Rmd Line number(s) for general data wrangling: 
-101-102, 114, 119, 124
+119-120, 138, 147, 153
 
 (B) .Rmd Line number(s) for a join operation: 
-149-150
+187-188
 
 (C) .Rmd Line number(s) for a spread or gather operation (or equivalent):
-173
+220
 
 (D) .Rmd Line number(s) for use of regular expressions: 
 
 
 (E) .Rmd Line number(s) for use of reduction and/or transformation functions: 
-97-98, 208-209
+113-114, 269-270
 
 (F) .Rmd Line number(s) for use of user-defined functions: 
-156-158, 165
+195-197, 207
 
 (G) .Rmd Line number(s) for use of loops and/or control flow: 
 
@@ -59,11 +59,11 @@ Lines 43, 46, 55, 66, 69, 78.
 
 
 (A) .Rmd Line number(s) for use of mulitple different geoms:  
-200-201
+258-259
 (B) .Rmd Line number(s) for use of multiple aesthetics:  
-181-182
+232-233
 (C) .Rmd Line number(s) for use of layered graphics:  
-191-192
+245-246
 (D) .Rmd Line number(s) for use of leaflet maps:  
 
 (E) .Rmd Line number(s) for use of decision tree or dendogram results:    
