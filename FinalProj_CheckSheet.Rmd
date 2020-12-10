@@ -41,7 +41,7 @@ Lines 43, 46, 55, 66, 69, 78.
 
 
 (E) .Rmd Line number(s) for use of reduction and/or transformation functions: 
-97-98
+97-98, 208-209
 
 (F) .Rmd Line number(s) for use of user-defined functions: 
 156-158, 165
