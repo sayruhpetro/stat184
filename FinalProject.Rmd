@@ -175,7 +175,46 @@ joined %>% spread(key = Genre, value = NA_Sales)
 
 ### Graphs of the Data
 
-Graphs are an important visualization tool for examining relationships between data. For my first graph,
+Graphs are an important visualization tool for examining relationships between data. For my first graph, I will be looking at the relationship between user score and meta score. As well I added color mapped to positive critics and size mapped to negative critics so that all of the scored information and their correlations can be viewed.
+
+```{r}
+joined %>% ggplot(aes(x=user_score, y=metascore)) + 
+  geom_point(aes(color = positive_critics,stat = "identity", size = negative_critics))
+```
+
+Using this simple graph, you can see a clearly positive correlation between high metascore(critic and user score, with critic being weighted higher) and user score. I also added a color scheme to this graph to add the number of positive critics as a factor onto the graph. You can see that just because a game has a high metascore and user_score, that does not imply a high number of positive critics. This graph confirms my conclusion that if a game sells, then it happens to sell and that critics, positive users, and metascores have little to do with the success of a game and more on if the game sells then it sells. 
+As well, you can see an obvious correlation between low user score and lots of negative critics. Seeing as both of these correlations are positive, you can say with some confidence that the user score and number of positive or negative critics have some correlation. However you can also see lots of outliers in this graph as well.
+<br>
+
+Adding onto this graph, I decided to look at the cluster of points for high number of positive critics vs meta score along with an overlay of a smooth density line. I also used color to showcase user score as well to showcase the same amount of information of distribution of user score.
+```{r}
+joined %>% ggplot(aes(x=positive_critics, y=metascore)) + 
+  geom_point(aes(color = user_score, stat = "identity")) + stat_smooth() 
+```
+
+
+In this graph, you can see the meta score vs number of positive critics. I added a smooth layer to the points so you can see the error margin around the smooth function. Again, a high number of critics vs a high meta score do seem to have some positive correlation, however there are enough outliers to prove that correlation does not equal causation in this case. In other words, just because a game has a high number of positive critics does not mean it has a high meta score and vice versa. With the color representing user score, you can compare the results to the above graph and see that there are lots of outliers considering user score, meta score, and number of positive critics.
+
+Finally, I wanted to see density with histograms for a bit more information, so I used user score to shed some more light on the density of the how users score these games. I also added the mean to show the mean user score vs the density.
+```{r}
+joined %>% ggplot(aes(x=user_score)) + 
+  geom_density() + geom_vline(aes(xintercept = mean(user_score)), linetype = 2)
+```
+
+
+Finally, I look to use sales data to see how the top 5 selling games are represented in user score.
+First, I need to filter to find the top selling games. For the sake of simplicity, I am only going to use Global Sales.
+```{r}
+highSelling <-  rank(-joined$Global_Sales)
+head(joined[order(joined$Rank),],5)
+```
+
+Now that we have the 5 top selling games from Global Sales, we can use this information to draw a few conclusions. 
+
+### Conclusion
+
+Notice that the games in the top 5 highest selling list are completely different from the games with the highest number of positive critics that we found in the beginning of the report. Noting this, I conclude that my research question has an answer and that answer is: high critic scores and high user scores do not always indicate a high selling game. The highest rated games in this dataset are completely different from the games that are the highest selling in the dataset. Correlation does not equal causation, so more analysis would be needed, however for the purposes of this report and the research question asked, I can say, using my plots and code, that a game having high critic scores or high user scores does not mean it will sell well in the markets and vice versa. 
+
 
 
 
