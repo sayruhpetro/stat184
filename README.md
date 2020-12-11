@@ -2,24 +2,24 @@
 
 ## The two source dataset links can be found below:
 <br>
-1. metacritic_games.csv
+**metacritic_games.csv**
 <br>
-https://raw.githubusercontent.com/sayruhpetro/stat184/master/metacritic_games.csv
+[metacritic_games.csv](https://raw.githubusercontent.com/sayruhpetro/stat184/master/metacritic_games.csv)
 
 <br>
-2. Vgsales.csv
+**vgsales.csv**
 <br>
-https://raw.githubusercontent.com/sayruhpetro/stat184/master/vgsales.csv
+[vgsales.csv](https://raw.githubusercontent.com/sayruhpetro/stat184/master/vgsales.csv)
 <br>
 **OR**
 <br>
 You can find these on my Github Repo page instead.
 
 ## The link to my Final Project Check List can be found below:
-https://github.com/sayruhpetro/stat184/blob/master/FinalProj_CheckSheet.nb.html
+[CheckSheet](https://github.com/sayruhpetro/stat184/blob/master/FinalProj_CheckSheet.nb.html)
 
 ## The link to my Final Project can be found below:
-https://github.com/sayruhpetro/stat184/blob/master/FinalProject.nb.html
+[Final Project](https://github.com/sayruhpetro/stat184/blob/master/FinalProject.nb.html)
 
 ## And, as always, you can find the link to my Github Repo in the side bar
 
