@@ -2,16 +2,16 @@
 
 ## The two source dataset links can be found below:
 <br>
-#### metacritic_games.csv
+### metacritic_games.csv
 <br>
 https://raw.githubusercontent.com/sayruhpetro/stat184/master/metacritic_games.csv
 
 <br>
-#### Vgsales.csv
+### Vgsales.csv
 <br>
 https://raw.githubusercontent.com/sayruhpetro/stat184/master/vgsales.csv
 <br>
-#### OR
+### OR
 <br>
 You can find these on my Github Repo page instead.
 
