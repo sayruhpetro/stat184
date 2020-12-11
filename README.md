@@ -1,32 +1,27 @@
-## Welcome to GitHub Pages
+### Welcome to Sarah Petro's Stat 184 Final Project Webpage
 
-You can use the [editor on GitHub](https://github.com/sayruhpetro/stat184/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
+## The two source dataset links can be found below:
+**metacritic_games.csv
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+https://raw.githubusercontent.com/sayruhpetro/stat184/master/metacritic_games.csv
+**Vgsales.csv
 
-### Markdown
+https://raw.githubusercontent.com/sayruhpetro/stat184/master/vgsales.csv
+**OR
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+You can find these on my Github Repo page instead.
 
-```markdown
-Syntax highlighted code block
+## The link to my Final Project Check List can be found below:
+https://github.com/sayruhpetro/stat184/blob/master/FinalProj_CheckSheet.nb.html
 
-# Header 1
-## Header 2
-### Header 3
+## The link to my Final Project can be found below:
+https://github.com/sayruhpetro/stat184/blob/master/FinalProject.nb.html
 
-- Bulleted
-- List
+## And, as always, you can find the link to my Github Repo in the side bar
 
-1. Numbered
-2. List
+### Thanks for a wonderful semester!
 
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
+## Sarah Petro
 
 ### Jekyll Themes
 
