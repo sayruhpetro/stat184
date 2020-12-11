@@ -1,13 +1,16 @@
 ### Welcome to Sarah Petro's Stat 184 Final Project Webpage
 
 ## The two source dataset links can be found below:
-**metacritic_games.csv
-
+<br>
+**metacritic_games.csv**
 https://raw.githubusercontent.com/sayruhpetro/stat184/master/metacritic_games.csv
-**Vgsales.csv
 
+<br>
+**Vgsales.csv**
 https://raw.githubusercontent.com/sayruhpetro/stat184/master/vgsales.csv
-**OR
+<br>
+**OR**
+<br>
 
 You can find these on my Github Repo page instead.
 
