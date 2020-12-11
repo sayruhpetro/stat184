@@ -2,16 +2,16 @@
 
 ## The two source dataset links can be found below:
 <br>
-**metacritic_games.csv**
+__metacritic_games.csv__
+<br>
 https://raw.githubusercontent.com/sayruhpetro/stat184/master/metacritic_games.csv
 
 <br>
-**Vgsales.csv**
+__Vgsales.csv__
 https://raw.githubusercontent.com/sayruhpetro/stat184/master/vgsales.csv
 <br>
 **OR**
 <br>
-
 You can find these on my Github Repo page instead.
 
 ## The link to my Final Project Check List can be found below:
